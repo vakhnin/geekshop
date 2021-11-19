@@ -1,0 +1,5 @@
+Dump products app models:
+python -X utf8 manage.py dumpdata  products --indent 2 -o products\fixtures\goods.json
+
+Load data in DB from fixture:
+python manage.py loaddata goods.json
