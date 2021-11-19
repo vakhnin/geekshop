@@ -6,7 +6,7 @@ from .models import Product
 def main(request):
     title = "geekshop - Главная"
     content = {'title': title}
-    
+
     return render(request, 'products/index.html', content)
 
 
