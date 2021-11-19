@@ -1,6 +1,5 @@
-{% load static %}
 body {
-    background: url("{% static 'vendor/img/wallpaper.jpg' %}") no-repeat center top fixed;
+    background: url("../vendor/img/wallpaper.jpg") no-repeat center top fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
