@@ -3,3 +3,4 @@ db.sqlite3
 geekshop/__pycache__/
 products/__pycache__/
 products/migrations/__pycache__/
+products/management/commands/__pycache__/
