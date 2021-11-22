@@ -3,3 +3,7 @@ geekshop/db.sqlite3
 geekshop/geekshop/__pycache__/
 geekshop/products/__pycache__/
 geekshop/products/migrations/__pycache__/
+db.sqlite3
+geekshop/__pycache__/
+products/__pycache__/
+products/migrations/__pycache__/
