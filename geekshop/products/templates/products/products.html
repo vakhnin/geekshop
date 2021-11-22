@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'products' %}">Каталог</a>
+                    <a class="nav-link" href="{% url 'products:index' %}">Каталог</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fas fa-shopping-bag"></i></a>
@@ -88,15 +88,15 @@
                     <div class="card h-100">
                         <a href="#">
                             <img class="card-img-top"
-                                 src="{% static 'vendor/img/products/' %}{{ product.img }}"
-                                 alt="">
+                                 src="/media/{{ product.image }}"
+                                 alt="{{ product.short_desc }}">
                         </a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a href="#">{{ product.title }}</a>
+                                <a href="#">{{ product.name }}</a>
                             </h4>
                             <h5>{{ product.price }} руб.</h5>
-                            <p class="card-text">{{ product.text }}</p>
+                            <p class="card-text">{{ product.description }}</p>
                         </div>
                         <div class="card-footer text-center">
                             <button type="button" class="btn btn-outline-success">Отправить в корзину</button>

@@ -1,0 +1,120 @@
+[
+{
+  "model": "products.productcategory",
+  "pk": 1,
+  "fields": {
+    "name": "Подарки",
+    "description": ""
+  }
+},
+{
+  "model": "products.productcategory",
+  "pk": 2,
+  "fields": {
+    "name": "Новинки",
+    "description": ""
+  }
+},
+{
+  "model": "products.productcategory",
+  "pk": 3,
+  "fields": {
+    "name": "Обувь",
+    "description": ""
+  }
+},
+{
+  "model": "products.productcategory",
+  "pk": 4,
+  "fields": {
+    "name": "Аксессуары",
+    "description": ""
+  }
+},
+{
+  "model": "products.productcategory",
+  "pk": 5,
+  "fields": {
+    "name": "Одежда",
+    "description": ""
+  }
+},
+{
+  "model": "products.product",
+  "pk": 1,
+  "fields": {
+    "category": 2,
+    "name": "Худи черного цвета с монограммами adidas Originals",
+    "image": "products_images/Adidas-hoodie.png",
+    "short_desc": "Худи черного цвета с монограммами adidas Originals",
+    "description": "Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни",
+    "price": "6090.00",
+    "quantity": 20
+  }
+},
+{
+  "model": "products.product",
+  "pk": 2,
+  "fields": {
+    "category": 5,
+    "name": "Синяя куртка The North Face",
+    "image": "products_images/Blue-jacket-The-North-Face.png",
+    "short_desc": "Синяя куртка The North Face",
+    "description": "Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель.",
+    "price": "23725.00",
+    "quantity": 20
+  }
+},
+{
+  "model": "products.product",
+  "pk": 3,
+  "fields": {
+    "category": 5,
+    "name": "Коричневый спортивный oversized-топ ASOS DESIGN",
+    "image": "products_images/Brown-sports-oversized-top-ASOS-DESIGN.png",
+    "short_desc": "Коричневый спортивный oversized-топ ASOS DESIGN",
+    "description": "Материал с плюшевой текстурой. Удобный и мягкий.",
+    "price": "3390.00",
+    "quantity": 20
+  }
+},
+{
+  "model": "products.product",
+  "pk": 4,
+  "fields": {
+    "category": 4,
+    "name": "Черный рюкзак Nike Heritage",
+    "image": "products_images/Black-Nike-Heritage-backpack.png",
+    "short_desc": "Черный рюкзак Nike Heritage",
+    "description": "Плотная ткань. Легкий материал.",
+    "price": "2340.00",
+    "quantity": 20
+  }
+},
+{
+  "model": "products.product",
+  "pk": 5,
+  "fields": {
+    "category": 3,
+    "name": "Черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex",
+    "image": "products_images/Black-Dr-Martens-shoes.png",
+    "short_desc": "Черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex",
+    "description": "Гладкий кожаный верх. Натуральный материал.",
+    "price": "13590.00",
+    "quantity": 20
+  }
+},
+{
+  "model": "products.product",
+  "pk": 6,
+  "fields": {
+    "category": 5,
+    "name": "Темно-синие широкие строгие брюки ASOS DESIGN",
+    "image": "products_images/Dark-blue-wide-leg-ASOs-DESIGN-trousers.png",
+    "short_desc": "Темно-синие широкие строгие брюки ASOS DESIGN",
+    "description": "Легкая эластичная ткань сирсакер Фактурная ткань.",
+    "price": "2890.00",
+    "quantity": 20
+  }
+}
+]

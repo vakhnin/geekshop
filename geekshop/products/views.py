@@ -1,18 +1,18 @@
-import json
-import os
-
 from django.shortcuts import render
+from .models import Product
 
 
 # Create your views here.
 def main(request):
-    content = {"title": "geekshop - Главная"}
+    title = "geekshop - Главная"
+    content = {'title': title}
+
     return render(request, 'products/index.html', content)
 
 
 def products(request):
-    with open('products' + os.sep + 'fixtures' + os.sep + 'products-data.json', 'r',
-              encoding="utf-8") as json_file:
-        content = json.load(json_file)
-        content['title'] = 'geekshop - Каталог'
+    title = 'geekshop - Каталог'
+    products = Product.objects.all()
+    content = {'title': title, 'products': products}
+
     return render(request, 'products/products.html', content)
