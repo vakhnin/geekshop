@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+from authapp.models import ShopUser
 
 import json, os
 
@@ -35,6 +35,10 @@ class Command(BaseCommand):
             new_category.save()
 
         # Создаем суперпользователя при помощи менеджера модели
-        if not User.objects.filter(username='geekbrains'):
-            super_user = User.objects.create_superuser('geekbrains', 'geekbrains@geekshop.local', 'geekbrains')
+        if not ShopUser.objects.filter(username='geekbrains'):
+            super_user = \
+                ShopUser.objects.create_superuser(username='geekbrains',
+                                              email='geekbrains@geekshop.local',
+                                              password='geekbrains',
+                                              age=33)
 

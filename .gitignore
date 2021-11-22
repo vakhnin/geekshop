@@ -4,3 +4,5 @@ geekshop/__pycache__/
 products/__pycache__/
 products/migrations/__pycache__/
 products/management/commands/__pycache__/
+authapp/__pycache__/
+authapp/migrations/__pycache__/
