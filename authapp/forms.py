@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
+from django.core.exceptions import ValidationError
 
-from authapp.models import ShopUser
 from authapp.models import ShopUser
 
 
@@ -51,3 +51,10 @@ class UserProfilerForm(UserChangeForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+
+    def clean_age(self):
+        age = self.cleaned_data['age']
+        if age < 18:
+            # self.add_error('age_incorrect', 'Возраст не может быть меньше 18 лет')
+            raise ValidationError('Возраст не может быть меньше 18 лет', code='invalid')
+        return age
