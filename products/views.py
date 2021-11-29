@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+
 from .models import Product, ProductCategory
 
 
@@ -21,3 +22,16 @@ def products(request):
     }
 
     return render(request, 'products/products.html', content)
+
+
+def product(request, id):
+    title = 'geekshop - Каталог'
+    product_ = get_object_or_404(Product, id=id),
+    categories = ProductCategory.objects.all()
+    content = {
+        'title': title,
+        'product': product_[0],
+        'categories': categories,
+    }
+
+    return render(request, 'products/product.html', content)

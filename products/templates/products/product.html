@@ -1,0 +1,65 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block css %}
+<!-- Bootstrap core CSS -->
+<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="{% static 'css/products.css' %}" rel="stylesheet">
+{% endblock %}
+
+<!-- Page Content -->
+{% block menu %}
+<div class="col-lg-3">
+    <h1 class="my-4">GeekShop</h1>
+    <div class="list-group">
+        {% for category in categories %}
+        <a href="#" class="list-group-item">{{ category.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+<!-- /.col-lg-3 -->
+{% endblock %}
+
+
+{% block content %}
+<div class="col-lg-9">
+    <div class="card_add_basket">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 mx-auto">
+                <div class="card h-100">
+                    <a href="#">
+                        <img class="card-img-top"
+                             src="{{ product.image.url }}"
+                             alt="">
+                    </a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="{% url 'products:product' product.id %}">{{ product.name }}</a>
+                        </h4>
+                        <h5>{{ product.price }} руб.</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-outline-success" value="{{ product.id  }}">
+                            Отправить в корзину
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+{% endblock %}
+
+{% block footer %}
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2020</p>
+    </div>
+    <!-- /.container -->
+</footer>
+{% endblock %}
