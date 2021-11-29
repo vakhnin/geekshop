@@ -6,3 +6,6 @@ products/migrations/__pycache__/
 products/management/commands/__pycache__/
 authapp/__pycache__/
 authapp/migrations/__pycache__/
+media/users_avatars/
+baskets/__pycache__/
+baskets/migrations/__pycache__/
