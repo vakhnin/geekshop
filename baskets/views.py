@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 # Create your views here.
 from django.template.loader import render_to_string
@@ -6,6 +7,7 @@ from baskets.models import Basket
 from products.models import Product
 
 
+@login_required
 def basket_add(request, id):
     if request.is_ajax():
         user_select = request.user
@@ -20,10 +22,27 @@ def basket_add(request, id):
 
         products = Product.objects.all()
         context = {'products': products}
-        result = render_to_string('mainapp/includes/card.html', context)
+        result = render_to_string('products/includes/card.html', context)
         return JsonResponse({'result': result})
 
 
+@login_required
+def basket_edit(request, id_basket, quantity):
+    if request.is_ajax():
+        basket = Basket.objects.get(id=id_basket)
+        if quantity > 0:
+            basket.quantity = quantity
+            basket.save()
+        else:
+            basket.delete()
+
+        baskets = Basket.objects.filter(user=request.user)
+        context = {'baskets': baskets}
+        result = render_to_string('baskets/basket.html', context)
+        return JsonResponse({'result': result})
+
+
+@login_required
 def basket_remove(request, basket_id):
     Basket.objects.get(id=basket_id).delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
