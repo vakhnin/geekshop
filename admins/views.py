@@ -100,4 +100,9 @@ def admin_categories_update(request, pk):
 
 @user_passes_test(lambda u: u.is_superuser)
 def admin_categories_delete(request, pk):
-    pass
+    if request.method == 'POST':
+        category = ProductCategory.objects.get(pk=pk)
+        category.is_active = False
+        category.save()
+
+    return HttpResponseRedirect(reverse('admins:admin_categories'))
