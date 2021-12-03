@@ -9,6 +9,9 @@ from authapp.models import ShopUser
 
 
 # Create your views here.
+from products.models import ProductCategory
+
+
 @user_passes_test(lambda u: u.is_superuser)
 def index(request):
     return render(request, 'admins/admin.html')
@@ -64,3 +67,26 @@ def admin_users_delete(request, pk):
         user.save()
 
     return HttpResponseRedirect(reverse('admins:admin_users'))
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_categories(request):
+    context = {
+        'categories': ProductCategory.objects.all()
+    }
+    return render(request, 'admins/admin-categories-read.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_categories_create(request):
+    pass
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_categories_update(request, pk):
+    pass
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_categories_delete(request, pk):
+    pass
