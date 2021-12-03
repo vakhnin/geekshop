@@ -4,10 +4,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminForm
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminForm, ProductAdminForm
 from authapp.models import ShopUser
 # Create your views here.
-from products.models import ProductCategory
+from products.models import ProductCategory, Product
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -117,3 +117,54 @@ def admin_categories_delete(request, pk):
         category.save()
 
     return HttpResponseRedirect(reverse('admins:admin_categories'))
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products(request):
+    context = {
+        'products': Product.objects.all()
+    }
+    return render(request, 'admins/admin-products-read.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_create(request):
+    if request.method == 'POST':
+        form = ProductAdminForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:admin_products'))
+    else:
+        form = ProductAdminForm()
+    context = {
+        'title': 'Geekshop - Админ | Создание продукта',
+        'form': form
+    }
+    return render(request, 'admins/admin-products-create.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_update(request, pk):
+    product = ProductCategory.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ProductAdminForm(data=request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:admin_products'))
+    else:
+        form = ProductAdminForm(instance=product)
+    context = {
+        'title': 'Geekshop - Админ | Обновление продукта',
+        'form': form,
+        'product': product
+    }
+    return render(request, 'admins/admin-products-update-delete.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_delete(request, pk):
+    if request.method == 'POST':
+        product = Product.objects.get(pk=pk)
+        product.is_active = False
+        product.save()
+
+    return HttpResponseRedirect(reverse('admins:admin_products'))

@@ -2,7 +2,7 @@ from django import forms
 
 from authapp.forms import UserRegisterForm, UserProfilerForm
 from authapp.models import ShopUser
-from products.models import ProductCategory
+from products.models import ProductCategory, Product
 
 
 class UserAdminRegisterForm(UserRegisterForm):
@@ -37,6 +37,18 @@ class UserAdminProfileForm(UserProfilerForm):
 class ProductCategoryAdminForm(forms.ModelForm):
     class Meta:
         model = ProductCategory
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control py-4'
+
+
+class ProductAdminForm(forms.ModelForm):
+    class Meta:
+        model = Product
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
