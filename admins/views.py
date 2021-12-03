@@ -1,13 +1,11 @@
 # Create your views here.
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminProfileForm
 from authapp.models import ShopUser
-
-
 # Create your views here.
 from products.models import ProductCategory
 
@@ -84,7 +82,20 @@ def admin_categories_create(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def admin_categories_update(request, pk):
-    pass
+    category = ProductCategory.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ProductCategoryAdminProfileForm(data=request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:admin_categories'))
+    else:
+        form = ProductCategoryAdminProfileForm(instance=category)
+    context = {
+        'title': 'Geekshop - Админ | Обновление категорий',
+        'form': form,
+        'category': category
+    }
+    return render(request, 'admins/admin-categories-update-delete.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
