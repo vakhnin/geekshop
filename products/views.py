@@ -14,7 +14,7 @@ def main(request):
 def products(request):
     title = 'geekshop - Каталог'
     products = Product.objects.all()
-    categories = ProductCategory.objects.all()
+    categories = ProductCategory.objects.filter(is_active=True)
     content = {
         'title': title,
         'products': products,
@@ -24,10 +24,10 @@ def products(request):
     return render(request, 'products/products.html', content)
 
 
-def product(request, id):
+def product(request, pk):
     title = 'geekshop - Каталог'
-    product_ = get_object_or_404(Product, id=id),
-    categories = ProductCategory.objects.all()
+    product_ = get_object_or_404(Product, pk=pk),
+    categories = ProductCategory.objects.filter(is_active=True)
     content = {
         'title': title,
         'product': product_[0],
