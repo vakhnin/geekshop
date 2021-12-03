@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminProfileForm
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminForm
 from authapp.models import ShopUser
 # Create your views here.
 from products.models import ProductCategory
@@ -77,19 +77,30 @@ def admin_categories(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def admin_categories_create(request):
-    pass
+    if request.method == 'POST':
+        form = ProductCategoryAdminForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:admin_categories'))
+    else:
+        form = ProductCategoryAdminForm()
+    context = {
+        'title': 'Geekshop - Админ | Создание категории',
+        'form': form
+    }
+    return render(request, 'admins/admin-categories-create.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def admin_categories_update(request, pk):
     category = ProductCategory.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ProductCategoryAdminProfileForm(data=request.POST, instance=category)
+        form = ProductCategoryAdminForm(data=request.POST, instance=category)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('admins:admin_categories'))
     else:
-        form = ProductCategoryAdminProfileForm(instance=category)
+        form = ProductCategoryAdminForm(instance=category)
     context = {
         'title': 'Geekshop - Админ | Обновление категорий',
         'form': form,

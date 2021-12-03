@@ -34,7 +34,7 @@ class UserAdminProfileForm(UserProfilerForm):
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 
 
-class ProductCategoryAdminProfileForm(forms.ModelForm):
+class ProductCategoryAdminForm(forms.ModelForm):
     class Meta:
         model = ProductCategory
         fields = '__all__'
