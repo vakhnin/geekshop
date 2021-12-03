@@ -144,7 +144,7 @@ def admin_products_create(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def admin_products_update(request, pk):
-    product = ProductCategory.objects.get(pk=pk)
+    product = Product.objects.get(pk=pk)
     if request.method == 'POST':
         form = ProductAdminForm(data=request.POST, instance=product)
         if form.is_valid():
