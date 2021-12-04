@@ -47,6 +47,8 @@ class ProductCategoryAdminForm(forms.ModelForm):
 
 
 class ProductAdminForm(forms.ModelForm):
+    image = forms.ImageField(widget=forms.FileInput(), required=False)
+
     class Meta:
         model = Product
         fields = '__all__'
@@ -59,3 +61,4 @@ class ProductAdminForm(forms.ModelForm):
                 field.widget.attrs['class'] = 'form-control'
             else:
                 field.widget.attrs['class'] = 'form-control py-4'
+            self.fields['image'].widget.attrs['class'] = 'custom-file-input'

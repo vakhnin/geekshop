@@ -15,6 +15,7 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
+                                <th>Фото</th>
                                 <th>Продукт</th>
                                 <th>Короткое описание</th>
                                 <th>Описание</th>
@@ -28,6 +29,12 @@
                             <tbody>
                             {% for product in products %}
                             <tr>
+                                <td>
+                                    {% if product.image %}
+                                    <img width="100" height="100"
+                                         src="{{ product.image.url }}" class="img-thumbnail">
+                                    {% endif %}
+                                </td>
                                 <td><a href="{% url 'admins:admin_products_update' product.id %}"
                                        style="color: dodgerblue">{{ product.name }}</a></td>
                                 <td>{{ product.short_desc }}</td>

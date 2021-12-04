@@ -31,7 +31,7 @@
                 <div class="card h-100">
                     <a href="#">
                         <img class="card-img-top"
-                             src="{{ product.image.url }}"
+                             src="{% if product.image %}{{ product.image.url }}{% endif %}"
                              alt="">
                     </a>
                     <div class="card-body">

@@ -129,7 +129,7 @@ def admin_products(request):
 @user_passes_test(lambda u: u.is_superuser)
 def admin_products_create(request):
     if request.method == 'POST':
-        form = ProductAdminForm(data=request.POST)
+        form = ProductAdminForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('admins:admin_products'))
@@ -146,7 +146,7 @@ def admin_products_create(request):
 def admin_products_update(request, pk):
     product = Product.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ProductAdminForm(data=request.POST, instance=product)
+        form = ProductAdminForm(data=request.POST, instance=product, files=request.FILES)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('admins:admin_products'))
