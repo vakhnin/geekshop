@@ -28,7 +28,8 @@
 
                             <tbody>
                             {% for product in products %}
-                            <tr>
+                            <tr
+                                    {% if not product.is_active %} class="table-warning" {% endif %}>
                                 <td>
                                     {% if product.image %}
                                     <img width="100" height="100"
