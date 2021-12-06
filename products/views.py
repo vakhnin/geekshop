@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 
 from .mixin import BaseClassContextMixin
 from .models import Product, ProductCategory
@@ -12,6 +12,19 @@ def main(request):
     content = {'title': title}
 
     return render(request, 'products/index.html', content)
+
+
+class ProductListView(ListView, BaseClassContextMixin):
+    context_object_name = 'products'
+    model = Product
+    template_name = 'products/products.html'
+    title = 'geekshop - Каталог'
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = ProductCategory.objects.all()
+        return context
 
 
 def products(request, id_category=None, page=1):
@@ -45,7 +58,7 @@ class ProductDetailView(DetailView, BaseClassContextMixin):
     context_object_name = 'product'
     model = Product
     template_name = 'products/product.html'
-    title = 'geekshop - Каталог'
+    title = 'geekshop - Детальная информация'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
