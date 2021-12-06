@@ -9,5 +9,5 @@ urlpatterns = [
     path('', products.products, name='index'),
     path('category/<int:id_category>/', products.products, name='category'),
     path('page/<int:page>', products.products, name='page'),
-    path('product/<int:pk>/', products.ProductListView.as_view(), name='product'),
+    path('product/<int:pk>/', products.ProductDetailView.as_view(), name='product'),
 ]

@@ -41,7 +41,7 @@ def products(request, id_category=None, page=1):
     return render(request, 'products/products.html', context)
 
 
-class ProductListView(DetailView, BaseClassContextMixin):
+class ProductDetailView(DetailView, BaseClassContextMixin):
     context_object_name = 'product'
     model = Product
     template_name = 'products/product.html'
