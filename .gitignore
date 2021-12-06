@@ -9,3 +9,6 @@ authapp/migrations/__pycache__/
 media/users_avatars/
 baskets/__pycache__/
 baskets/migrations/__pycache__/
+admins/__pycache__/
+admins/migrations/__pycache__/
+media/products_images/
