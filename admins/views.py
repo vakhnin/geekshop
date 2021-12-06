@@ -12,62 +12,46 @@ from products.mixin import BaseClassContextMixin, CustomDispatchMixin
 from products.models import ProductCategory, Product
 
 
-# users CRUD
 @user_passes_test(lambda u: u.is_superuser)
 def index(request):
     return render(request, 'admins/admin.html')
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_users(request):
-    context = {
-        'users': ShopUser.objects.all()
-    }
-    return render(request, 'admins/admin-users-read.html', context)
+# users CRUD
+class UserCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
+    model = ShopUser
+    template_name = 'admins/admin-users-create.html'
+    form_class = UserAdminRegisterForm
+    success_url = reverse_lazy('admins:admin_users')
+    title = 'Админка | Создать пользователя'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_users_create(request):
-    if request.method == 'POST':
-        form = UserAdminRegisterForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admins:admin_users'))
-    else:
-        form = UserAdminRegisterForm()
-    context = {
-        'title': 'Geekshop - Админ | Регистрация',
-        'form': form
-    }
-    return render(request, 'admins/admin-users-create.html', context)
+class UserListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
+    model = ShopUser
+    template_name = 'admins/admin-users-read.html'
+    title = 'Админка | Пользователи'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_users_update(request, pk):
-    user_select = ShopUser.objects.get(pk=pk)
-    if request.method == 'POST':
-        form = UserAdminProfileForm(data=request.POST, instance=user_select, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admins:admin_users'))
-    else:
-        form = UserAdminProfileForm(instance=user_select)
-    context = {
-        'title': 'Geekshop - Админ | Обновление',
-        'form': form,
-        'user_select': user_select
-    }
-    return render(request, 'admins/admin-users-update-delete.html', context)
+class UserUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
+    model = ShopUser
+    template_name = 'admins/admin-users-update-delete.html'
+    form_class = UserAdminProfileForm
+    success_url = reverse_lazy('admins:admin_users')
+    title = 'Админка | Обновить пользователя'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_users_delete(request, pk):
-    if request.method == 'POST':
-        user = ShopUser.objects.get(pk=pk)
-        user.is_active = False
-        user.save()
+class UserDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
+    model = ShopUser
+    template_name = 'admins/admin-users-update-delete.html'
+    form_class = UserAdminProfileForm
+    success_url = reverse_lazy('admins:admin_users')
+    title = 'Админка | Удалить пользователя'
 
-    return HttpResponseRedirect(reverse('admins:admin_users'))
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 # categories CRUD
