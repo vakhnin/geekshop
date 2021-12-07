@@ -1,5 +1,6 @@
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -67,6 +68,5 @@ def profile(request):
     return render(request, 'authapp/profile.html', context)
 
 
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('main'))
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy('main')
