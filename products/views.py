@@ -1,4 +1,3 @@
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
@@ -27,31 +26,19 @@ class ProductListView(ListView, BaseClassContextMixin):
         return context
 
 
-def products(request, id_category=None, page=1):
+class CategoryProductListView(ListView, BaseClassContextMixin):
+    context_object_name = 'products'
+    model = Product
+    template_name = 'products/products.html'
     title = 'geekshop - Каталог'
 
-    if id_category:
-        products = Product.objects.filter(category_id=id_category)
-    else:
-        products = Product.objects.all()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = ProductCategory.objects.all()
+        return context
 
-    paginator = Paginator(products, per_page=3)
-
-    try:
-        products_paginator = paginator.page(page)
-    except PageNotAnInteger:
-        products_paginator = paginator.page(1)
-    except EmptyPage:
-        products_paginator = paginator.page(paginator.num_pages)
-
-    products = products_paginator
-    categories = ProductCategory.objects.all()
-    context = {
-        'title': title,
-        'products': products,
-        'categories': categories,
-    }
-    return render(request, 'products/products.html', context)
+    def get_queryset(self):
+        return Product.objects.filter(category=self.kwargs['id_category'])
 
 
 class ProductDetailView(DetailView, BaseClassContextMixin):
