@@ -2,30 +2,35 @@ from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import FormView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm
 # Create your views here.
+from authapp.models import ShopUser
 from baskets.models import Basket
+from products.mixin import BaseClassContextMixin
 
 
-def login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
+class UserLoginView(FormView, BaseClassContextMixin):
+    model = ShopUser
+    form_class = UserLoginForm
+    success_url = reverse_lazy('main')
+    template_name = 'authapp/login.html'
+    title = 'Geekshop - Авторизация'
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
         if form.is_valid():
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = auth.authenticate(username=username, password=password)
             if user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse('main'))
-    else:
-        form = UserLoginForm()
-    context = {
-        'title': 'Geekshop - Авторизация',
-        'form': form
-    }
-    return render(request, 'authapp/login.html', context)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 def register(request):
