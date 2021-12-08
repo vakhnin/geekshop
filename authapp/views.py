@@ -8,6 +8,7 @@ from django.views.generic import FormView, UpdateView
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm
 # Create your views here.
 from authapp.models import ShopUser
+from baskets.models import Basket
 from products.mixin import BaseClassContextMixin, UserDispatchMixin
 
 
@@ -56,6 +57,11 @@ class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['baskets'] = Basket.objects.filter(user=self.request.user)
+        return context
 
 
 class UserLogoutView(LogoutView):
