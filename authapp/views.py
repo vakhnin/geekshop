@@ -1,16 +1,14 @@
 from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, UpdateView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm
 # Create your views here.
 from authapp.models import ShopUser
-from baskets.models import Basket
-from products.mixin import BaseClassContextMixin
+from products.mixin import BaseClassContextMixin, UserDispatchMixin
 
 
 class UserLoginView(FormView, BaseClassContextMixin):
@@ -49,23 +47,15 @@ def register(request):
     return render(request, 'authapp/register.html', context)
 
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = UserProfilerForm(instance=request.user, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Данные профиля успешно обновленны')
-        else:
-            for error in form.errors:
-                messages.error(request, form.errors[error][0])
+class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
+    title = 'Geekshop - Регистрация'
+    model = ShopUser
+    form_class = UserProfilerForm
+    success_url = reverse_lazy('authapp:profile')
+    template_name = 'authapp/profile.html'
 
-    context = {
-        'title': 'Geekshop | Профайл',
-        'form': UserProfilerForm(instance=request.user),
-        'baskets': Basket.objects.filter(user=request.user),
-    }
-    return render(request, 'authapp/profile.html', context)
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 class UserLogoutView(LogoutView):
