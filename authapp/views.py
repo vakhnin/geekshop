@@ -1,8 +1,6 @@
 from django.contrib import auth, messages
 from django.contrib.auth.views import LogoutView
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import FormView, UpdateView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm
@@ -33,19 +31,22 @@ class UserLoginView(FormView, BaseClassContextMixin):
             return self.form_invalid(form)
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(data=request.POST)
+class UserRegisterView(FormView):
+    model = ShopUser
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('authapp:login')
+    template_name = 'authapp/register.html'
+    title = 'Geekshop - Регистрация'
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
         if form.is_valid():
+            print(2222)
             form.save()
-            messages.success(request, 'Вы успешно зарегистрировались')
-            return HttpResponseRedirect(reverse('authapp:login'))
-    else:
-        form = UserRegisterForm()
-    context = {
-        'title': 'Geekshop - Регистрация',
-        'form': form}
-    return render(request, 'authapp/register.html', context)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
