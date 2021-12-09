@@ -63,6 +63,15 @@ class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
         context['baskets'] = Basket.objects.filter(user=self.request.user)
         return context
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Данные профиля успешно обновлены')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for error in form.errors:
+            messages.error(self.request, form.errors[error][0])
+        return super().form_invalid(form)
+
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('main')
