@@ -1,16 +1,13 @@
-from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 
 from .mixin import BaseClassContextMixin
 from .models import Product, ProductCategory
 
 
 # Create your views here.
-def main(request):
-    title = "geekshop - Главная"
-    content = {'title': title}
-
-    return render(request, 'products/index.html', content)
+class IndexTemplateView(TemplateView, BaseClassContextMixin):
+    title = 'geekshop - Главная'
+    template_name = 'products/index.html'
 
 
 class ProductListView(ListView, BaseClassContextMixin):

@@ -1,9 +1,7 @@
 # Create your views here.
-from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminForm, ProductAdminForm
 from authapp.models import ShopUser
@@ -12,9 +10,8 @@ from products.mixin import BaseClassContextMixin, CustomDispatchMixin
 from products.models import ProductCategory, Product
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def index(request):
-    return render(request, 'admins/admin.html')
+class IndexTemplateView(TemplateView):
+    template_name = 'admins/admin.html'
 
 
 # users CRUD
