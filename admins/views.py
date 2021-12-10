@@ -10,8 +10,9 @@ from products.mixin import BaseClassContextMixin, CustomDispatchMixin
 from products.models import ProductCategory, Product
 
 
-class IndexTemplateView(TemplateView):
+class IndexTemplateView(TemplateView, BaseClassContextMixin, CustomDispatchMixin):
     template_name = 'admins/admin.html'
+    title = 'Админка'
 
 
 # users CRUD
