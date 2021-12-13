@@ -1,67 +1,78 @@
 from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
+from django.contrib.auth.views import LogoutView
+from django.urls import reverse_lazy
+from django.views.generic import FormView, UpdateView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm
 # Create your views here.
+from authapp.models import ShopUser
 from baskets.models import Basket
+from products.mixin import BaseClassContextMixin, UserDispatchMixin
 
 
-def login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
+class UserLoginView(FormView, BaseClassContextMixin):
+    model = ShopUser
+    form_class = UserLoginForm
+    success_url = reverse_lazy('main')
+    template_name = 'authapp/login.html'
+    title = 'Geekshop - Авторизация'
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
         if form.is_valid():
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = auth.authenticate(username=username, password=password)
             if user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse('main'))
-    else:
-        form = UserLoginForm()
-    context = {
-        'title': 'Geekshop - Авторизация',
-        'form': form
-    }
-    return render(request, 'authapp/login.html', context)
-
-
-def register(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Вы успешно зарегистрировались')
-            return HttpResponseRedirect(reverse('authapp:login'))
-    else:
-        form = UserRegisterForm()
-    context = {
-        'title': 'Geekshop - Регистрация',
-        'form': form}
-    return render(request, 'authapp/register.html', context)
-
-
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = UserProfilerForm(instance=request.user, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Данные профиля успешно обновленны')
+            return self.form_valid(form)
         else:
-            for error in form.errors:
-                messages.error(request, form.errors[error][0])
-
-    context = {
-        'title': 'Geekshop | Профайл',
-        'form': UserProfilerForm(instance=request.user),
-        'baskets': Basket.objects.filter(user=request.user),
-    }
-    return render(request, 'authapp/profile.html', context)
+            return self.form_invalid(form)
 
 
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('main'))
+class UserRegisterView(FormView):
+    model = ShopUser
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('authapp:login')
+    template_name = 'authapp/register.html'
+    title = 'Geekshop - Регистрация'
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+            print(2222)
+            form.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
+    title = 'Geekshop - Регистрация'
+    model = ShopUser
+    form_class = UserProfilerForm
+    success_url = reverse_lazy('authapp:profile')
+    template_name = 'authapp/profile.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['baskets'] = Basket.objects.filter(user=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Данные профиля успешно обновлены')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for error in form.errors:
+            messages.error(self.request, form.errors[error][0])
+        return super().form_invalid(form)
+
+
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy('main')

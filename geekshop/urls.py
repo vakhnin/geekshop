@@ -22,7 +22,7 @@ from django.urls import path
 import products.views as products
 
 urlpatterns = [
-    path('', products.main, name='main'),
+    path('', products.IndexTemplateView.as_view(), name='main'),
     path('products/', include('products.urls', namespace='products')),
     path('admin/', admin.site.urls),
     path('auth/', include('authapp.urls', namespace='auth')),

@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 # Create your views here.
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView
 
 from baskets.models import Basket
+from products.mixin import UserDispatchMixin
 from products.models import Product
 
 
@@ -42,7 +45,9 @@ def basket_edit(request, id_basket, quantity):
         return JsonResponse({'result': result})
 
 
-@login_required
-def basket_remove(request, basket_id):
-    Basket.objects.get(id=basket_id).delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+class BasketDeleteView(DeleteView, UserDispatchMixin):
+    model = Basket
+    success_url = reverse_lazy('authapp:profile')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
