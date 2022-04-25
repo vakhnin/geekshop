@@ -7,6 +7,9 @@ from django.utils.timezone import now
 
 # Create your models here.
 class ShopUser(AbstractUser):
+    class Meta(object):
+        unique_together = ('email',)
+
     image = models.ImageField(upload_to='users_avatars', blank=True)
     age = models.PositiveIntegerField(verbose_name='возраст', default=18)
 
