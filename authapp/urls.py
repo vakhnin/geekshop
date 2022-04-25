@@ -9,4 +9,6 @@ urlpatterns = [
     path('logout/', authapp.UserLogoutView.as_view(), name='logout'),
     path('register/', authapp.UserRegisterView.as_view(), name='register'),
     path('profile/', authapp.UserDetailView.as_view(), name='profile'),
+
+    path('verify/<str:email>/<str:activate_key>/', authapp.UserRegisterView.verify, name='verify'),
 ]
