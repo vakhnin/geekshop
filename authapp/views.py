@@ -47,7 +47,8 @@ class UserRegisterView(FormView):
             user = form.save()
             if self.send_verify_link(user):
                 messages.set_level(request, messages.SUCCESS)
-                messages.success(request, 'Вы успешно зарегистрировались')
+                messages.success(request, 'Вы успешно зарегистрировались. '
+                                          'На Ваш E-mail отправленно письмо, для подтверждения E-mail.')
                 return HttpResponseRedirect(reverse('authapp:login'))
             else:
                 messages.set_level(request, messages.ERROR)

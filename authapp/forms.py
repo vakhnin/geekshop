@@ -34,6 +34,8 @@ class UserRegisterForm(UserCreationForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Введите  фамилию'
         self.fields['password1'].widget.attrs['placeholder'] = 'Введите пароль'
         self.fields['password2'].widget.attrs['placeholder'] = 'Повторите пароль'
+        self.fields['last_name'].required = True
+        self.fields['email'].required = True
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
 
