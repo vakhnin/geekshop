@@ -1,4 +1,5 @@
 from baskets.models import Basket
+from products.models import ProductCategory
 
 
 def basket(request):
@@ -8,4 +9,10 @@ def basket(request):
 
     return {
         'baskets': baskets_list
+    }
+
+
+def categories(request):
+    return {
+        'categories': ProductCategory.objects.all()
     }
