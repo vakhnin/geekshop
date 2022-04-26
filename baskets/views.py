@@ -10,9 +10,13 @@ from products.mixin import UserDispatchMixin
 from products.models import Product
 
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
 @login_required
 def basket_add(request, id):
-    if request.is_ajax():
+    if is_ajax(request=request):
         user_select = request.user
         product = Product.objects.get(id=id)
         baskets = Basket.objects.filter(user=user_select, product=product)
