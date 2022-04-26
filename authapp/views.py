@@ -63,20 +63,33 @@ class UserRegisterView(FormView):
         verify_link = reverse('authapp:verify', args=[user.email, user.activation_key])
         subject = f'Для активации учетной записи {user.username} пройдите по ссылке'
         message = f'Для подтверждения учетной записи {user.username} на портале \n {settings.DOMAIN_NAME}{verify_link}'
-        return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+        return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=True)
 
-    def verify(self, email, activate_key):
-        try:
-            user = ShopUser.objects.get(email=email)
-            if user and user.activation_key == activate_key and not user.is_activation_key_expires():
-                user.activation_key = ''
-                user.activation_key_expires = None
-                user.is_active = True
-                user.save()
-                auth.login(self, user)
-            return render(self, 'authapp/verification.html')
-        except Exception as e:
-            return HttpResponseRedirect(reverse('main'))
+
+def verify(request, email, activate_key):
+    try:
+        user = ShopUser.objects.get(email=email)
+        if user.is_active:
+            messages.success(request, 'Электронная почта уже подтверждена.')
+            return HttpResponseRedirect(reverse('authapp:login'))
+        if user and user.activation_key == activate_key and not user.is_activation_key_expires():
+            user.activation_key = ''
+            user.activation_key_expires = None
+            user.is_active = True
+            user.save()
+
+            messages.set_level(request, messages.SUCCESS)
+            messages.success(request, 'Электронная почта успешно подтверждена.')
+        else:
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, 'Не удалось подтвердить электронную почту. '
+                                    'Обратитесь к администратору.')
+        return HttpResponseRedirect(reverse('authapp:login'))
+    except Exception as e:
+        messages.set_level(request, messages.ERROR)
+        messages.error(request, 'Не удалось подтвердить электронную почту. '
+                                'Обратитесь к администратору.')
+        return HttpResponseRedirect(reverse('authapp:login'))
 
 
 class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
