@@ -102,19 +102,15 @@ class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
     def get_object(self, queryset=None):
         return self.request.user
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Данные профиля успешно обновлены')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        for error in form.errors:
-            messages.error(self.request, form.errors)
-        return super().form_invalid(form)
-
     def post(self, request, *args, **kwargs):
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         profile_form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.user.userprofile)
-        if form.is_valid() and profile_form.is_valid():
+        if not form.is_valid():
+            messages.error(self.request, form.errors)
+        elif not profile_form.is_valid():
+            messages.error(self.request, profile_form.errors)
+        else:
+            messages.success(self.request, 'Данные профиля успешно обновлены')
             form.save()
         return redirect(self.success_url)
 
