@@ -2,11 +2,11 @@ from django.contrib import auth, messages
 from django.contrib.auth.views import LogoutView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
 
-from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm
+from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 # Create your views here.
 from authapp.models import ShopUser
 from geekshop import settings
@@ -95,7 +95,7 @@ def verify(request, email, activate_key):
 class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
     title = 'Geekshop - Регистрация'
     model = ShopUser
-    form_class = UserProfilerForm
+    form_class = UserProfileForm
     success_url = reverse_lazy('authapp:profile')
     template_name = 'authapp/profile.html'
 
@@ -108,8 +108,20 @@ class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
 
     def form_invalid(self, form):
         for error in form.errors:
-            messages.error(self.request, form.errors[error][0])
+            messages.error(self.request, form.errors)
         return super().form_invalid(form)
+
+    def post(self, request, *args, **kwargs):
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
+        profile_form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.user.userprofile)
+        if form.is_valid() and profile_form.is_valid():
+            form.save()
+        return redirect(self.success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data()
+        context['profile'] = UserProfileEditForm(instance=self.request.user.userprofile)
+        return context
 
 
 class UserLogoutView(LogoutView):
