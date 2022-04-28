@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 # Create your views here.
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -10,9 +10,13 @@ from products.mixin import UserDispatchMixin
 from products.models import Product
 
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
 @login_required
 def basket_add(request, id):
-    if request.is_ajax():
+    if is_ajax(request=request):
         user_select = request.user
         product = Product.objects.get(id=id)
         baskets = Basket.objects.filter(user=user_select, product=product)
@@ -22,16 +26,12 @@ def basket_add(request, id):
             basket.save()
         else:
             Basket.objects.create(user=user_select, product=product, quantity=1)
-
-        products = Product.objects.all()
-        context = {'products': products}
-        result = render_to_string('products/includes/card.html', context)
-        return JsonResponse({'result': result})
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
 def basket_edit(request, id_basket, quantity):
-    if request.is_ajax():
+    if is_ajax(request=request):
         basket = Basket.objects.get(id=id_basket)
         if quantity > 0:
             basket.quantity = quantity
@@ -45,9 +45,7 @@ def basket_edit(request, id_basket, quantity):
         return JsonResponse({'result': result})
 
 
-class BasketDeleteView(DeleteView, UserDispatchMixin):
-    model = Basket
-    success_url = reverse_lazy('authapp:profile')
-
-    def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
+@login_required
+def basket_remove(request, pk):
+    Basket.objects.get(id=pk).delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
