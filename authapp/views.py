@@ -28,7 +28,7 @@ class UserLoginView(FormView, BaseClassContextMixin):
             password = request.POST.get('password')
             user = auth.authenticate(username=username, password=password)
             if user.is_active:
-                auth.login(request, user)
+                auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
