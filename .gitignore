@@ -13,3 +13,4 @@ admins/__pycache__/
 admins/migrations/__pycache__/
 media/products_images/
 .env
+authapp/templatetags/__pycache__/
