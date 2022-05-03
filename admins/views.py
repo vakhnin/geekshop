@@ -3,9 +3,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminForm, ProductAdminForm
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminForm, ProductAdminForm, \
+    OrderUpdateForm
 from authapp.models import ShopUser
 # Create your views here.
+from ordersapp.models import Order
 from products.mixin import BaseClassContextMixin, CustomDispatchMixin
 from products.models import ProductCategory, Product
 
@@ -118,3 +120,18 @@ class ProductDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
         self.object.is_active = False
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+# orders
+class OrdertListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
+    model = Order
+    template_name = 'admins/admin-orders-read.html'
+    title = 'Админка | Список заказов'
+
+
+class OrderUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
+    model = Order
+    template_name = 'admins/admin-orders-update.html'
+    form_class = OrderUpdateForm
+    title = 'Админка | Обновление статуса заказа'
+    success_url = reverse_lazy('admins:admin_orders')
