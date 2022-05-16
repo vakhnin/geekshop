@@ -1,6 +1,6 @@
-"use strict";
+$(document).ready(function () {
+    "use strict";
 
-window.onload = function () {
     let quantity, price, orderitem_num, delta_quantity, orderitem_quantity, delta_cost;
 
     let quantity_arr = [];
@@ -67,4 +67,4 @@ window.onload = function () {
         delta_quantity = -quantity_arr[orderitem_num];
         orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
     }
-}
+});
