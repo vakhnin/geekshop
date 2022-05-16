@@ -2,6 +2,7 @@ from django import forms
 
 from authapp.forms import UserRegisterForm, UserProfileForm
 from authapp.models import ShopUser
+from ordersapp.models import Order
 from products.models import ProductCategory, Product
 
 
@@ -62,3 +63,31 @@ class ProductAdminForm(forms.ModelForm):
             else:
                 field.widget.attrs['class'] = 'form-control py-4'
             self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+
+
+class OrderAdminForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('status',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control py-4'
+
+
+class OrderUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Order
+        fields = ('status',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            if field_name == 'status':
+                field.widget.attrs['class'] = 'form-control'
+            else:
+                field.widget.attrs['class'] = 'form-control py-4'

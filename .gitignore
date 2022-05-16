@@ -14,3 +14,5 @@ admins/migrations/__pycache__/
 media/products_images/
 .env
 authapp/templatetags/__pycache__/
+ordersapp/__pycache__/
+ordersapp/migrations/__pycache__/

@@ -43,7 +43,13 @@ def save_user_profile(backend, user, response, *args, **kwargs):
         user.userprofile.about = data['about']
 
     if data['has_photo']:
-        user.image = data['photo_max']
+        photo = data['photo_max']
+        photo_response = requests.get(photo)
+        if photo_response.status_code == requests.codes.ok:
+            path_photo = f'users_avatars/{user.pk}.jpg'
+            with open(f'media/{path_photo}', 'wb') as ph:
+                ph.write(photo_response.content)
+            user.image = path_photo
 
     user.age = age
     user.save()
