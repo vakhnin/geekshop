@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.db import transaction
 from django.forms import inlineformset_factory
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -14,6 +14,11 @@ from products.mixin import BaseClassContextMixin
 from baskets.models import Basket
 from ordersapp.forms import OrderItemsForm
 from ordersapp.models import Order, OrderItem
+from products.models import Product
+
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
 class OrderList(ListView, BaseClassContextMixin):
@@ -114,3 +119,11 @@ def order_forming_complete(request, pk):
     order.status = Order.SEND_TO_PROCESSED
     order.save()
     return HttpResponseRedirect(reverse('orders:list'))
+
+
+def get_product_price(request, pk):
+    if is_ajax(request=request):
+        product = Product.objects.get(pk=pk)
+        if product:
+            return JsonResponse({'price': product.price})
+        return JsonResponse({'price': 0})

@@ -1,4 +1,6 @@
-window.onload = function () {
+$(document).ready(function () {
+    "use strict";
+
     $('.card_add_basket').on('click', 'button[type="button"]', () => {
         let t_href = event.target.value
         $.ajax(
@@ -22,4 +24,4 @@ window.onload = function () {
             });
         event.preventDefault()
     });
-}
+});

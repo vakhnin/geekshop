@@ -9,6 +9,14 @@ from django.db import models
 from products.models import Product
 
 
+class OrderItemQuerySet(models.QuerySet):
+    def delete(self, *args, **kwargs):
+        for item in self:
+            item.product.quantity += item.quantity
+            item.product.save()
+        super(OrderItemQuerySet, self).delete(*args, **kwargs)
+
+
 class Order(models.Model):
     FORMING = 'FM'
     SEND_TO_PROCESSED = 'STP'
@@ -56,9 +64,24 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
+    objects = OrderItemQuerySet.as_manager()
+
     order = models.ForeignKey(Order, verbose_name='заказ', related_name='orderitems', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='продукты', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
 
     def get_product_cost(self):
         return self.product.price * self.quantity
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            item = self.get_item(int(self.pk))
+            self.product.quantity -= self.quantity - item
+        else:
+            self.product.quantity -= self.quantity
+        self.product.save()
+        super(OrderItem, self).save(*args, **kwargs)
+
+    @staticmethod
+    def get_item(pk):
+        return OrderItem.objects.get(pk=pk).quantity
