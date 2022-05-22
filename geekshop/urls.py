@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.urls import path
 
 import products.views as products
+import debug_toolbar
 
 urlpatterns = [
     path('', products.IndexTemplateView.as_view(), name='main'),
@@ -34,3 +35,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [path('debug/', include(debug_toolbar.urls))]
