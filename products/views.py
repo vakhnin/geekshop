@@ -25,7 +25,10 @@ class CategoryProductListView(ListView, BaseClassContextMixin):
     title = 'geekshop - Каталог'
 
     def get_queryset(self):
-        return Product.objects.filter(category=self.kwargs['id_category'])
+        return Product.objects. \
+                   filter(category=self.kwargs['id_category'], is_active=True,
+                          category__is_active=True). \
+                   select_related('category')[:3]
 
 
 class ProductDetailView(DetailView, BaseClassContextMixin):
