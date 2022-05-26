@@ -1,0 +1,17 @@
+http://89.108.78.157/
+http://89.108.78.157/products/
+http://89.108.78.157/products/category/1/
+http://89.108.78.157/products/category/2/
+http://89.108.78.157/products/category/3/
+http://89.108.78.157/products/category/4/
+http://89.108.78.157/products/category/5/
+http://89.108.78.157/auth/profile/
+http://89.108.78.157/ordersapp/
+http://89.108.78.157/ordersapp/update/1/
+http://89.108.78.157/ordersapp/update/2/
+http://89.108.78.157/products/product/1/
+http://89.108.78.157/products/product/2/
+http://89.108.78.157/products/product/3/
+http://89.108.78.157/products/product/4/
+http://89.108.78.157/products/product/5/
+http://89.108.78.157/products/product/6/
