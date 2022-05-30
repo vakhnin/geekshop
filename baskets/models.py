@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+from django.utils.functional import cached_property
+
 from authapp.models import ShopUser
 from products.models import Product
 
@@ -16,7 +18,7 @@ class BasketQuerySet(models.QuerySet):
 class Basket(models.Model):
     objects = BasketQuerySet.as_manager()
 
-    user = models.ForeignKey(ShopUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(ShopUser, on_delete=models.CASCADE, related_name='basket')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
     create_timestamp = models.DateTimeField(auto_now_add=True)
@@ -28,12 +30,18 @@ class Basket(models.Model):
     def sum(self):
         return self.quantity * self.product.price
 
+    @cached_property
+    def get_items_cached(self):
+        return self.user.basket.select_related()
+
     def total_sum(self):
-        baskets = Basket.objects.filter(user=self.user)
+        # baskets = Basket.objects.filter(user=self.user)
+        baskets = self.get_items_cached
         return sum(basket.sum() for basket in baskets)
 
     def total_quantity(self):
-        baskets = Basket.objects.filter(user=self.user)
+        # baskets = Basket.objects.filter(user=self.user)
+        baskets = self.get_items_cached
         return sum(basket.quantity for basket in baskets)
 
     def save(self, *args, **kwargs):
