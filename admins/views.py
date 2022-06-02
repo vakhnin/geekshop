@@ -10,6 +10,9 @@ from authapp.models import ShopUser
 from ordersapp.models import Order
 from products.mixin import BaseClassContextMixin, CustomDispatchMixin
 from products.models import ProductCategory, Product
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
+from django.db import connection
 
 
 class IndexTemplateView(TemplateView, BaseClassContextMixin, CustomDispatchMixin):
@@ -135,3 +138,20 @@ class OrderUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     form_class = OrderUpdateForm
     title = 'Админка | Обновление статуса заказа'
     success_url = reverse_lazy('admins:admin_orders')
+
+
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}:')
+    [print(query['sql']) for query in update_queries]
+
+
+@receiver(pre_save, sender=ProductCategory)
+def product_is_active_update_productcategory_save(sender, instance, **kwargs):
+    if instance.pk:
+        if instance.is_active:
+            instance.product_set.update(is_active=True)
+        else:
+            instance.product_set.update(is_active=False)
+
+    db_profile_by_type(sender, 'UPDATE', connection.queries)
