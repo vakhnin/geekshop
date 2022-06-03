@@ -1,4 +1,5 @@
 # Create your views here.
+from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
@@ -78,6 +79,16 @@ class CategoryUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin)
     form_class = ProductCategoryAdminForm
     title = 'Админка | Обновления категории'
     success_url = reverse_lazy('admins:admin_categories')
+
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                self.object.product_set. \
+                    update(price=F('price') * (1 - discount / 100))
+                db_profile_by_type(self.__class__, 'UPDATE',
+                                   connection.queries)
+        return super().form_valid(form)
 
 
 class CategoryDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
