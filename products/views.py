@@ -1,10 +1,7 @@
 from django.views.generic import DetailView, ListView, TemplateView
 
-from geekshop import settings
 from .mixin import BaseClassContextMixin
 from .models import Product
-
-from django.core.cache import cache
 
 
 # Create your views here.
@@ -19,6 +16,7 @@ class ProductListView(ListView, BaseClassContextMixin):
     template_name = 'products/products.html'
     title = 'geekshop - Каталог'
     paginate_by = 3
+    ordering = ['-id']
 
 
 class CategoryProductListView(ListView, BaseClassContextMixin):
@@ -34,25 +32,8 @@ class CategoryProductListView(ListView, BaseClassContextMixin):
                    select_related('category')[:3]
 
 
-def get_product_(pk):
-    if settings.LOW_CACHE:
-        key = f'product{pk}'
-        product = cache.get(key)
-        if product is None:
-            product = Product.objects.get(id=pk)
-            cache.set(key, product)
-        return product
-    else:
-        return Product.objects.get(id=pk)
-
-
 class ProductDetailView(DetailView, BaseClassContextMixin):
     context_object_name = 'product'
     model = Product
     template_name = 'products/product.html'
     title = 'geekshop - Детальная информация'
-
-    def get_context_data(self, **kwargs):
-        context = super(ProductDetailView, self).get_context_data()
-        context['product'] = get_product_(self.kwargs.get('pk'))
-        return context
