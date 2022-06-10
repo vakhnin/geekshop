@@ -16,6 +16,7 @@ class ProductListView(ListView, BaseClassContextMixin):
     template_name = 'products/products.html'
     title = 'geekshop - Каталог'
     paginate_by = 3
+    ordering = ['-id']
 
 
 class CategoryProductListView(ListView, BaseClassContextMixin):
