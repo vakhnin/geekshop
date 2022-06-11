@@ -1,0 +1,14 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block css %}
+<!-- Bootstrap core CSS -->
+<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<link href="{% static 'css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+{% include 'baskets/basket.html' %}
+{% endblock %}

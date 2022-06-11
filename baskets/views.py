@@ -5,15 +5,21 @@ from django.http import JsonResponse, HttpResponseRedirect
 # Create your views here.
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, DetailView, TemplateView
 
+from authapp.models import ShopUser
 from baskets.models import Basket
-from products.mixin import UserDispatchMixin
+from products.mixin import UserDispatchMixin, BaseClassContextMixin
 from products.models import Product
 
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
+class BasketView(TemplateView, BaseClassContextMixin, UserDispatchMixin):
+    title = 'Geekshop - Корзина'
+    template_name = 'baskets/basket-page.html'
 
 
 @login_required
