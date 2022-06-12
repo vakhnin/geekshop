@@ -19,7 +19,7 @@ def is_ajax(request):
 
 class BasketView(TemplateView, BaseClassContextMixin, UserDispatchMixin):
     title = 'Geekshop - Корзина'
-    template_name = 'baskets/basket-page.html'
+    template_name = 'baskets/basket.html'
 
 
 @login_required
