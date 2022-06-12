@@ -78,19 +78,14 @@
 </nav>
 {% endblock %}
 
-<div class="container">
-    <div class="row">
-        {% block menu %}
-        {% endblock %}
+{% block menu %}
+{% endblock %}
 
-        {% block content %}
-        {% endblock %}
-    </div>
-</div>
+{% block content %}
+{% endblock %}
 
 {% block footer %}
 {% endblock %}
-
 
 {% block javascript %}
 <!-- Bootstrap core JavaScript -->

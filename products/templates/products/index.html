@@ -2,19 +2,20 @@
 {% load static %}
 
 {% block css %}
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="{% static 'css/index.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block menu %}
 {% endblock %}
 
 <section>
-{% block content %}
-<!-- Page Content -->
+    {% block content %}
+    <!-- Page Content -->
+    <div class="container">
         <div class="row">
             <div class="col-lg-6">
                 <h1 class="mt-5">GeekShop Store</h1>
@@ -29,7 +30,8 @@
                 </button>
             </div>
         </div>
-{% endblock %}
+    </div>
+    {% endblock %}
 </section>
 
 {% block javascript %}
