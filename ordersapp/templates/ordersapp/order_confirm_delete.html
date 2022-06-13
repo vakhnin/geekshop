@@ -7,15 +7,20 @@
 {% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <div class="category_delete">
-        <div class="h1">Уверены, что хотите удалить заказ?</div>
-        {% include 'ordersapp/includes/inc_order_summary.html' %}
-        <form action="{% url 'orders:delete' object.pk %}" method="post">
-            {% csrf_token %}
-            <input class="btn btn-danger" type="submit" value="удалить">
-        </form>
-        <a href="{% url 'orders:list' %}" class="btn btn-success mt-4">отмена</a>
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <div class="text-center">
+            <div class="category_delete">
+                <div class="h1">Уверены, что хотите удалить заказ?</div>
+                {% include 'ordersapp/includes/inc_order_summary.html' %}
+                <form action="{% url 'orders:delete' object.pk %}" method="post">
+                    {% csrf_token %}
+                    <input class="btn btn-danger" type="submit" value="удалить">
+                </form>
+                <a href="{% url 'orders:list' %}" class="btn btn-success mt-4">отмена</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
