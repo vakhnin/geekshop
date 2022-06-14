@@ -7,7 +7,7 @@ $(document).ready(function () {
             {
                 url: "/baskets/add/" + t_href + "/",
                 success: (data) => {
-                    $('.card_add_basket').html(data.result)
+                    $('.total-quantity-navigation').text(data.total_quantity);
                 },
             });
         event.preventDefault()
@@ -19,7 +19,8 @@ $(document).ready(function () {
             {
                 url: "/baskets/edit/" + t_href.name + "/" + t_href.value + "/",
                 success: (data) => {
-                    $('.basket_list').html(data.result)
+                    $('.basket_list').html(data.result);
+                    $('.total-quantity-navigation').text($('.total-quantity').text());
                 },
             });
         event.preventDefault()
