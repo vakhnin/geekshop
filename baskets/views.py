@@ -34,7 +34,12 @@ def basket_add(request, id):
             basket.save()
         else:
             Basket.objects.create(user=user_select, product=product, quantity=1)
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        baskets = Basket.objects.filter(user=request.user)
+        total_quantity = 0
+        for bask in baskets:
+            total_quantity += bask.quantity
+        return JsonResponse({'total_quantity': total_quantity})
 
 
 @login_required
@@ -49,7 +54,7 @@ def basket_edit(request, id_basket, quantity):
 
         baskets = Basket.objects.filter(user=request.user)
         context = {'baskets': baskets}
-        result = render_to_string('baskets/basket.html', context)
+        result = render_to_string('baskets/includes/inc_basket.html', context)
         return JsonResponse({'result': result})
 
 
