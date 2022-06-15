@@ -41,7 +41,7 @@ class UserUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admin_users')
-    title = 'Админка | Обновить пользователя'
+    title = 'Админка | Обновление пользователя'
 
 
 class UserDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
@@ -77,7 +77,7 @@ class CategoryUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin)
     model = ProductCategory
     template_name = 'admins/admin-categories-update-delete.html'
     form_class = ProductCategoryAdminForm
-    title = 'Админка | Обновления категории'
+    title = 'Админка | Обновление категории'
     success_url = reverse_lazy('admins:admin_categories')
 
     def form_valid(self, form):
@@ -121,7 +121,7 @@ class ProductUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     model = Product
     template_name = 'admins/admin-products-update-delete.html'
     form_class = ProductAdminForm
-    title = 'Админка | Обновления категории'
+    title = 'Админка | Обновление продукта'
     success_url = reverse_lazy('admins:admin_products')
 
 

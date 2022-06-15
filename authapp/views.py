@@ -93,7 +93,7 @@ def verify(request, email, activate_key):
 
 
 class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
-    title = 'Geekshop - Регистрация'
+    title = 'Geekshop - Профиль'
     model = ShopUser
     form_class = UserProfileForm
     success_url = reverse_lazy('authapp:profile')
