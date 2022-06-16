@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 
-from products.mixin import BaseClassContextMixin, UserDispatchMixin
+from products.mixin import AddTitleToContextMixin, UserIsLoginMixin
 from baskets.models import Basket
 from ordersapp.forms import OrderItemsForm
 from ordersapp.models import Order, OrderItem
@@ -21,12 +21,12 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-class OrderList(ListView, BaseClassContextMixin, UserDispatchMixin):
+class OrderList(ListView, AddTitleToContextMixin, UserIsLoginMixin):
     model = Order
     title = 'GeekShop | Список заказов'
 
 
-class OrderCreate(CreateView, BaseClassContextMixin, UserDispatchMixin):
+class OrderCreate(CreateView, AddTitleToContextMixin, UserIsLoginMixin):
     model = Order
     fields = []
     success_url = reverse_lazy('orders:list')
@@ -69,7 +69,7 @@ class OrderCreate(CreateView, BaseClassContextMixin, UserDispatchMixin):
         return super(OrderCreate, self).form_valid(form)
 
 
-class OrderUpdate(UpdateView, BaseClassContextMixin, UserDispatchMixin):
+class OrderUpdate(UpdateView, AddTitleToContextMixin, UserIsLoginMixin):
     model = Order
     fields = []
     success_url = reverse_lazy('orders:list')
@@ -103,12 +103,12 @@ class OrderUpdate(UpdateView, BaseClassContextMixin, UserDispatchMixin):
         return super(OrderUpdate, self).form_valid(form)
 
 
-class OrderRead(DetailView, BaseClassContextMixin, UserDispatchMixin):
+class OrderRead(DetailView, AddTitleToContextMixin, UserIsLoginMixin):
     model = Order
     title = 'GeekShop | Просмотр заказа'
 
 
-class OrderDelete(DeleteView, BaseClassContextMixin, UserDispatchMixin):
+class OrderDelete(DeleteView, AddTitleToContextMixin, UserIsLoginMixin):
     model = Order
     success_url = reverse_lazy('orders:list')
     title = 'GeekShop | Удаление заказа'

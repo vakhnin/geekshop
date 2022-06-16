@@ -9,7 +9,7 @@ from django.views.generic import DeleteView, DetailView, TemplateView
 
 from authapp.models import ShopUser
 from baskets.models import Basket
-from products.mixin import UserDispatchMixin, BaseClassContextMixin
+from products.mixin import UserIsLoginMixin, AddTitleToContextMixin
 from products.models import Product
 
 
@@ -17,7 +17,7 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-class BasketView(TemplateView, BaseClassContextMixin, UserDispatchMixin):
+class BasketView(TemplateView, AddTitleToContextMixin, UserIsLoginMixin):
     title = 'Geekshop - Корзина'
     template_name = 'baskets/basket.html'
 

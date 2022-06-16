@@ -9,20 +9,20 @@ from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCat
 from authapp.models import ShopUser
 # Create your views here.
 from ordersapp.models import Order
-from products.mixin import BaseClassContextMixin, CustomDispatchMixin
+from products.mixin import AddTitleToContextMixin, UserIsSuperuserMixin
 from products.models import ProductCategory, Product
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from django.db import connection
 
 
-class IndexTemplateView(TemplateView, BaseClassContextMixin, CustomDispatchMixin):
+class IndexTemplateView(TemplateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     template_name = 'admins/admin.html'
     title = 'Админка'
 
 
 # users CRUD
-class UserCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
+class UserCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = ShopUser
     template_name = 'admins/admin-users-create.html'
     form_class = UserAdminRegisterForm
@@ -30,13 +30,13 @@ class UserCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
     title = 'Админка | Создать пользователя'
 
 
-class UserListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
+class UserListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = ShopUser
     template_name = 'admins/admin-users-read.html'
     title = 'Админка | Пользователи'
 
 
-class UserUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
+class UserUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = ShopUser
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm
@@ -44,7 +44,7 @@ class UserUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     title = 'Админка | Обновление пользователя'
 
 
-class UserDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
+class UserDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = ShopUser
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm
@@ -59,7 +59,7 @@ class UserDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
 
 
 # categories CRUD
-class CategoryCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
+class CategoryCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = ProductCategory
     template_name = 'admins/admin-categories-create.html'
     success_url = reverse_lazy('admins:admin_categories')
@@ -67,13 +67,13 @@ class CategoryCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin)
     title = 'Админка | Создание категории'
 
 
-class CategoryListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
+class CategoryListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = ProductCategory
     template_name = 'admins/admin-categories-read.html'
     title = 'Админка | Список категорий'
 
 
-class CategoryUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
+class CategoryUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = ProductCategory
     template_name = 'admins/admin-categories-update-delete.html'
     form_class = ProductCategoryAdminForm
@@ -91,7 +91,7 @@ class CategoryUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin)
         return super().form_valid(form)
 
 
-class CategoryDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
+class CategoryDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = ProductCategory
     success_url = reverse_lazy('admins:admin_categories')
 
@@ -103,7 +103,7 @@ class CategoryDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin)
 
 
 # products CRUD
-class ProductCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
+class ProductCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Product
     template_name = 'admins/admin-products-create.html'
     success_url = reverse_lazy('admins:admin_products')
@@ -111,13 +111,13 @@ class ProductCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
     title = 'Админка | Создание продукта'
 
 
-class ProductListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
+class ProductListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Product
     template_name = 'admins/admin-products-read.html'
     title = 'Админка | Список продуктов'
 
 
-class ProductUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
+class ProductUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Product
     template_name = 'admins/admin-products-update-delete.html'
     form_class = ProductAdminForm
@@ -125,7 +125,7 @@ class ProductUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     success_url = reverse_lazy('admins:admin_products')
 
 
-class ProductDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
+class ProductDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Product
     success_url = reverse_lazy('admins:admin_products')
 
@@ -137,13 +137,13 @@ class ProductDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
 
 
 # orders
-class OrdertListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
+class OrdertListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Order
     template_name = 'admins/admin-orders-read.html'
     title = 'Админка | Список заказов'
 
 
-class OrderUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
+class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Order
     template_name = 'admins/admin-orders-update.html'
     form_class = OrderUpdateForm

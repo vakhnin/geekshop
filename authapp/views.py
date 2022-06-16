@@ -10,10 +10,10 @@ from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, User
 # Create your views here.
 from authapp.models import ShopUser
 from geekshop import settings
-from products.mixin import BaseClassContextMixin, UserDispatchMixin
+from products.mixin import AddTitleToContextMixin, UserIsLoginMixin
 
 
-class UserLoginView(FormView, BaseClassContextMixin):
+class UserLoginView(FormView, AddTitleToContextMixin):
     model = ShopUser
     form_class = UserLoginForm
     success_url = reverse_lazy('main')
@@ -92,7 +92,7 @@ def verify(request, email, activate_key):
         return HttpResponseRedirect(reverse('authapp:login'))
 
 
-class UserDetailView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
+class UserDetailView(UpdateView, AddTitleToContextMixin, UserIsLoginMixin):
     title = 'Geekshop - Профиль'
     model = ShopUser
     form_class = UserProfileForm
