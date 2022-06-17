@@ -16,3 +16,4 @@ media/products_images/
 authapp/templatetags/__pycache__/
 ordersapp/__pycache__/
 ordersapp/migrations/__pycache__/
+admins/views/__pycache__/
