@@ -17,3 +17,4 @@ authapp/templatetags/__pycache__/
 ordersapp/__pycache__/
 ordersapp/migrations/__pycache__/
 admins/views/__pycache__/
+products/templatetags/__pycache__/
