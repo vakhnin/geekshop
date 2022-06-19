@@ -4,7 +4,7 @@ from admins.views.main import IndexTemplateView
 from admins.views.users import UserListView, UserCreateView, UserUpdateView, UserDeleteView
 from admins.views.categories import CategoryListView, CategoryCreateView, CategoryUpdateView, CategoryDeleteView
 from admins.views.products import ProductListView, ProductCreateView, ProductUpdateView, ProductDeleteView
-from admins.views.orders import OrdertListView, OrderUpdateView
+from admins.views.orders import OrdertListView, OrderUpdateView, OrderDeleteView
 
 app_name = 'admins'
 urlpatterns = [
@@ -27,4 +27,5 @@ urlpatterns = [
 
     path('orders/', OrdertListView.as_view(), name='admin_orders'),
     path('orders-update/<int:pk>', OrderUpdateView.as_view(), name='admin_orders_update'),
+    path('orders-delete/<int:pk>', OrderDeleteView.as_view(), name='admin_orders_delete'),
 ]

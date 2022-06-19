@@ -83,7 +83,7 @@ class OrderAdminForm(forms.ModelForm):
 class OrderUpdateForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ('status',)
+        fields = ('status','is_active')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -1,0 +1,85 @@
+{% extends 'admins/base.html' %}
+
+{% block content %}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid">
+            <h1 class="mt-4">Редактирование статуса заказа | {{ order.id }}</h1>
+            <div class="card-body">
+                <form action="{% url 'admins:admin_orders_update' order.id %}" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            Номер заказа: {{ order.id }}
+                        </div>
+                        <div class="col-lg-6">
+                            Пользователь: <a href="{% url 'admins:admin_users_update' order.user.id %}"
+                                             style="color: dodgerblue">{{ order.user }}</a>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            Создан: {{ order.created }}
+                        </div>
+                        <div class="col-lg-6">
+                            Изменен: {{ order.updated }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            Заказ оплачен:
+                            {% if order.paid %}
+                            {{ order.paid }}
+                            {% else %}
+                            нет
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="id_status">Статус</label>
+                                <select name="status" class="form-control" required id="id_status">
+                                    {% for status in order.ORDER_STATUS_CHOICES %}
+                                    {% if order.status == status.0 %}
+                                    <option value="{{ status.0 }}" selected>{{ status.1 }}</option>
+                                    {% else %}
+                                    <option value="{{ status.0 }}">{{ status.1 }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="small mb-1" for="{{ form.is_active.id_for_label }}">Заказ
+                                активен:</label>
+                            {{ form.is_active }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-12" style="margin-top: 33px;">
+                            <input class="btn btn-info btn-block" type="submit" value="Сохранить">
+                        </div>
+                    </div>
+                </form>
+                <form action="{% url 'admins:admin_orders_delete' order.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-12" style="margin-top: 33px;">
+                            <input class="btn btn-danger btn-block" type="submit" value="Удалить">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-muted">Copyright &copy; GeekShop 2021</div>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}
