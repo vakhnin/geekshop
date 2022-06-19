@@ -1,16 +1,16 @@
 from django.views.generic import DetailView, ListView, TemplateView
 
-from .mixin import BaseClassContextMixin
+from .mixin import AddTitleToContextMixin
 from .models import Product
 
 
 # Create your views here.
-class IndexTemplateView(TemplateView, BaseClassContextMixin):
+class IndexTemplateView(TemplateView, AddTitleToContextMixin):
     title = 'geekshop - Главная'
     template_name = 'products/index.html'
 
 
-class ProductListView(ListView, BaseClassContextMixin):
+class ProductListView(ListView, AddTitleToContextMixin):
     context_object_name = 'products'
     model = Product
     template_name = 'products/products.html'
@@ -19,7 +19,7 @@ class ProductListView(ListView, BaseClassContextMixin):
     ordering = ['-id']
 
 
-class CategoryProductListView(ListView, BaseClassContextMixin):
+class CategoryProductListView(ListView, AddTitleToContextMixin):
     context_object_name = 'products'
     model = Product
     template_name = 'products/products.html'
@@ -32,7 +32,7 @@ class CategoryProductListView(ListView, BaseClassContextMixin):
                    select_related('category')[:3]
 
 
-class ProductDetailView(DetailView, BaseClassContextMixin):
+class ProductDetailView(DetailView, AddTitleToContextMixin):
     context_object_name = 'product'
     model = Product
     template_name = 'products/product.html'
