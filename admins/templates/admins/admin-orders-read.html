@@ -27,7 +27,11 @@
 
                             <tbody>
                             {% for order in object_list %}
+                            {% if order.is_active %}
                             <tr>
+                            {% else %}
+                            <tr class="table-warning">
+                            {% endif %}
                                 <td><a href="{% url 'admins:admin_orders_update' order.id %}"
                                        style="color: dodgerblue">{{ order.id }}</a></td>
                                 <td><a href="{% url 'admins:admin_users_update' order.user.id %}"
@@ -36,7 +40,7 @@
                                 <td>{{ order.updated }}</td>
                                 <td class="text-center">
                                     {% if order.paid %}
-                                    <i class="fas fa-check-circle"></i>
+                                    {{ order.paid }}
                                     {% else %}
                                     <i class="fas fa-times-circle"></i>
                                     {% endif %}
