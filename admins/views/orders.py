@@ -1,9 +1,11 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.forms import inlineformset_factory
 from django.views.generic import ListView, UpdateView, DeleteView
 
 from admins.forms import OrderUpdateForm
-from ordersapp.models import Order
+from admins.forms import OrderItemsForm
+from ordersapp.models import Order, OrderItem
 from products.mixin import AddTitleToContextMixin, UserIsSuperuserMixin
 from products.models import ProductCategory
 from django.dispatch import receiver
@@ -24,6 +26,21 @@ class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     form_class = OrderUpdateForm
     title = 'Админка | Обновление статуса заказа'
     success_url = reverse_lazy('admins:admin_orders')
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderUpdateView, self).get_context_data()
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemsForm, extra=1)
+        if self.request.POST:
+            formset = OrderFormSet(self.request.POST, instance=self.object)
+        else:
+            formset = OrderFormSet(instance=self.object)
+            for num, form in enumerate(formset.forms):
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
+                    form.initial['image'] = form.instance.product.image
+
+        context['orderitems'] = formset
+        return context
 
 
 class OrderDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
