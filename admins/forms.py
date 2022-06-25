@@ -98,6 +98,7 @@ class OrderUpdateForm(forms.ModelForm):
 class OrderItemsForm(forms.ModelForm):
     price = forms.CharField(label='цена', required=False)
     image = forms.CharField(label='Фото', required=False)
+    field_order = ['image', 'product', 'quantity', 'price']
 
     class Meta:
         model = OrderItem

@@ -67,7 +67,7 @@ class OrderItem(models.Model):
     objects = OrderItemQuerySet.as_manager()
 
     order = models.ForeignKey(Order, verbose_name='заказ', related_name='orderitems', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, verbose_name='продукты', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name='продукт', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
 
     def get_product_cost(self):

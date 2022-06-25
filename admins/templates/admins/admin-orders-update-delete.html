@@ -60,19 +60,26 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>Фото</th>
-                                    <th>Продукт</th>
-                                    <th>Количество</th>
-                                    <th>Цена</th>
-                                    <th>Удалить</th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
                                 {{ orderitems.management_form }}
                                 {% for form in orderitems.forms %}
+                                {% if forloop.first %}
+                                <thead>
+                                <tr>
+                                    <!--                                    <th>Фото</th>-->
+                                    <!--                                    <th>Продукт</th>-->
+                                    <!--                                    <th>Количество</th>-->
+                                    <!--                                    <th>Цена</th>-->
+                                    <!--                                    <th>Удалить</th>-->
+                                    {% for field in form.visible_fields %}
+                                    <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">
+                                        {{ field.label|capfirst }}
+                                    </th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                {% endif %}
+
+                                <tbody>
                                 <tr>
                                     {% for field in form.visible_fields %}
                                     <td>
