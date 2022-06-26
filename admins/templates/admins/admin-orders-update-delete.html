@@ -65,13 +65,8 @@
                                 {% if forloop.first %}
                                 <thead>
                                 <tr>
-                                    <!--                                    <th>Фото</th>-->
-                                    <!--                                    <th>Продукт</th>-->
-                                    <!--                                    <th>Количество</th>-->
-                                    <!--                                    <th>Цена</th>-->
-                                    <!--                                    <th>Удалить</th>-->
                                     {% for field in form.visible_fields %}
-                                    <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">
+                                    <th>
                                         {{ field.label|capfirst }}
                                     </th>
                                     {% endfor %}
@@ -80,9 +75,16 @@
                                 {% endif %}
 
                                 <tbody>
-                                <tr>
+                                <tr class="formset_row">
                                     {% for field in form.visible_fields %}
                                     <td>
+                                        {% if forloop.first %}
+                                        {% for hidden in form.hidden_fields %}
+                                        {{ hidden }}
+                                        {% endfor %}
+                                        {% endif %}
+                                        {{ field.errors.as_ul }}
+
                                         {% if field.name == 'image' %}
                                         {% if field.value and field.value != 'None' %}
                                         <img width="100" height="100"
