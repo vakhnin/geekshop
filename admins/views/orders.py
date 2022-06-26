@@ -42,6 +42,10 @@ class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
         context['orderitems'] = formset
         return context
 
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
 
 class OrderDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Order
