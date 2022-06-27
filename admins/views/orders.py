@@ -10,7 +10,7 @@ from products.mixin import AddTitleToContextMixin, UserIsSuperuserMixin
 from products.models import ProductCategory
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
-from django.db import connection
+from django.db import connection, transaction
 
 
 # Create your views here.
@@ -43,7 +43,17 @@ class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
         return context
 
     def form_valid(self, form):
-        form.save()
+        context = self.get_context_data()
+        orderitems = context['orderitems']
+
+        with transaction.atomic():
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+            if self.object.get_total_cost() == 0:
+                self.object.delete()
+
+            form.save()
         return super().form_valid(form)
 
 
