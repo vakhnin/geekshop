@@ -5,7 +5,7 @@
     <main>
         <div class="container-fluid">
             <h1 class="mt-4">Редактирование статуса заказа | {{ order.id }}</h1>
-            <div class="card-body">
+            <div class="card-body order_form">
                 <form action="{% url 'admins:admin_orders_update' order.id %}" method="post"
                       enctype="multipart/form-data">
                     {% csrf_token %}
@@ -55,6 +55,16 @@
                             <label class="small mb-1" for="{{ form.is_active.id_for_label }}">Заказ
                                 активен:</label>
                             {{ form.is_active }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            общее количество товаров: <span class="order_total_quantity">
+                                {{ object.get_total_quantity }}</span>
+                        </div>
+                        <div class="col-lg-6">
+                            общая стоимость: <span class="order_total_cost">
+                                {{ object.get_total_cost }}</span> руб
                         </div>
                     </div>
                     <div class="card-body">
