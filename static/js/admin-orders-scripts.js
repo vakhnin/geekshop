@@ -75,7 +75,7 @@ $(document).ready(function () {
 
         if (orderitem_product_pk) {
             $.ajax({
-                url: '/ordersapp/product/' + orderitem_product_pk + '/price/',
+                url: '/orders/product/' + orderitem_product_pk + '/price/',
                 success: function (data) {
                     if (data.price) {
                         price_arr[orderitem_num] = parseFloat(data.price)
@@ -85,7 +85,7 @@ $(document).ready(function () {
                         let price_html = '<span class="orderitems-' + orderitem_num + '-price">'
                             + data.price.toString().replace('.', ',') + '</span> руб';
                         let current_tr = $('.order_form table').find('tr:eq(' + (orderitem_num + 1) + ')');
-                        current_tr.find('td:eq(2)').html(price_html)
+                        current_tr.find('td:eq(3)').html(price_html)
                     }
                 }
             })
