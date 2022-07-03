@@ -85,7 +85,8 @@ $(document).ready(function () {
                         let price_html = '<span class="orderitems-' + orderitem_num + '-price">'
                             + data.price.toString().replace('.', ',') + '</span> руб';
                         let current_tr = $('.order_form table').find('tr:eq(' + (orderitem_num + 1) + ')');
-                        current_tr.find('td:eq(2)').html(price_html)
+                        current_tr.find('td:eq(3)').html(price_html);
+                        current_tr.find('img').attr('src', data.image);
                     }
                 }
             })

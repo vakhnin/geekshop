@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 
+from geekshop import settings
 from products.mixin import AddTitleToContextMixin, UserIsLoginMixin
 from baskets.models import Basket
 from ordersapp.forms import OrderItemsForm
@@ -121,9 +122,13 @@ def order_forming_complete(request, pk):
     return HttpResponseRedirect(reverse('orders:list'))
 
 
-def get_product_price(request, pk):
+def get_product_data(request, pk):
     if is_ajax(request=request):
         product = Product.objects.get(pk=pk)
         if product:
-            return JsonResponse({'price': product.price})
-        return JsonResponse({'price': 0})
+            image = settings.MEDIA_URL + str(product.image)
+            return JsonResponse({
+                'price': product.price,
+                'image': image,
+            })
+        return JsonResponse({'price': 0, 'image': ''})
