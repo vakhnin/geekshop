@@ -75,7 +75,7 @@ $(document).ready(function () {
 
         if (orderitem_product_pk) {
             $.ajax({
-                url: '/orders/product/' + orderitem_product_pk + '/price/',
+                url: '/orders/product/' + orderitem_product_pk + '/data/',
                 success: function (data) {
                     if (data.price) {
                         price_arr[orderitem_num] = parseFloat(data.price)
