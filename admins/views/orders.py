@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
-from django.views.generic import ListView, UpdateView, DeleteView
+from django.views.generic import ListView, UpdateView, DeleteView, CreateView
 
 from admins.forms import OrderUpdateForm
 from admins.forms import OrderItemsForm
@@ -14,10 +14,26 @@ from django.db import connection, transaction
 
 
 # Create your views here.
-class OrdertListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class OrderListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Order
     template_name = 'admins/admin-orders-read.html'
     title = 'Админка | Список заказов'
+
+
+class OrderCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+    model = Order
+    fields = []
+    template_name = 'admins/admin-orders-create.html'
+    success_url = reverse_lazy('admins:admin_orders')
+    title = 'Админка | Создание заказа'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderCreateView, self).get_context_data()
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemsForm, extra=1)
+        formset = OrderFormSet(instance=self.object)
+
+        context['orderitems'] = formset
+        return context
 
 
 class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
