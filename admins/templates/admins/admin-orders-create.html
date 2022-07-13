@@ -1,0 +1,105 @@
+{% extends 'admins/base.html' %}
+
+{% block content %}
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid">
+            <h1 class="mt-4">Создание заказа</h1>
+            <div class="order_form">
+                <form action="{% url 'admins:admin_orders_create' %}" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            Пользователь: {{ form.user }}
+                        </div>
+                        <div class="col-lg-6">
+                            Статус: {{ form.status }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            Активный: {{ form.is_active }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            общее количество товаров: <span class="order_total_quantity">
+                                0</span>
+                        </div>
+                        <div class="col-lg-6">
+                            общая стоимость: <span class="order_total_cost">
+                                0</span> руб
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                {{ orderitems.management_form }}
+                                {% for form in orderitems.forms %}
+                                {% if forloop.first %}
+                                <thead>
+                                <tr>
+                                    {% for field in form.visible_fields %}
+                                    <th>
+                                        {{ field.label|capfirst }}
+                                    </th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% endif %}
+
+                                <tr class="formset_row">
+                                    {% for field in form.visible_fields %}
+                                    <td class="formset_td">
+                                        {% if forloop.first %}
+                                        {% for hidden in form.hidden_fields %}
+                                        {{ hidden }}
+                                        {% endfor %}
+                                        {% endif %}
+                                        {{ field.errors.as_ul }}
+
+                                        {% if field.name == 'image' %}
+                                        <div class="img_div">
+                                            {% if field.value and field.value != 'None' %}
+                                            <img width="100" height="100"
+                                                 src="{{ field.value.url }}"
+                                                 class="img-thumbnail">
+                                            {% endif %}
+                                        </div>
+                                        {% elif field.name == 'price' %}
+                                        {% if field.value %}
+                                        <span class="orderitems-{{ forloop.parentloop.counter0 }}-price">
+                                            {{ field.value}} руб </span>
+                                        {% endif %}
+                                        {% else %}
+                                        {{ field }}
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-12" style="margin-top: 33px;">
+                            <input class="btn btn-info btn-block" type="submit" value="Сохранить">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-muted">Copyright &copy; GeekShop 2021</div>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}

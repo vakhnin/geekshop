@@ -68,7 +68,7 @@ $(document).ready(function () {
         orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
     }
 
-    $(document).on('change', '.order_form select', function () {
+    $(document).on('change', '.card-body select', function () {
         let target = event.target;
         orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-product', ''));
         let orderitem_product_pk = target.options[target.selectedIndex].value;
@@ -84,8 +84,14 @@ $(document).ready(function () {
                         }
                         let price_html = '<span class="orderitems-' + orderitem_num + '-price">'
                             + data.price.toString().replace('.', ',') + '</span> руб';
+                        let img_html = '<img width="100" height="100" src="" class="img-thumbnail">';
                         let current_tr = $('.order_form table').find('tr:eq(' + (orderitem_num + 1) + ')');
                         current_tr.find('td:eq(3)').html(price_html);
+
+                        let current_img_div = current_tr.find('.img_div');
+                        if (current_img_div) {
+                            current_img_div.html(img_html);
+                        }
                         current_tr.find('img').attr('src', data.image);
                     }
                 }

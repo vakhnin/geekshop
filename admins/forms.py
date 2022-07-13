@@ -68,17 +68,19 @@ class ProductAdminForm(forms.ModelForm):
             self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 
 
-class OrderAdminForm(forms.ModelForm):
+class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ('status',)
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control py-4'
-
+            if field_name == 'user' or field_name == 'status':
+                field.widget.attrs['class'] = 'form-control'
+            else:
+                field.widget.attrs['class'] = 'form-control py-4'
 
 class OrderUpdateForm(forms.ModelForm):
     class Meta:

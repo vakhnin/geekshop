@@ -1,9 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
-from django.views.generic import ListView, UpdateView, DeleteView
+from django.views.generic import ListView, UpdateView, DeleteView, CreateView
 
-from admins.forms import OrderUpdateForm
+from admins.forms import OrderUpdateForm, OrderCreateForm
 from admins.forms import OrderItemsForm
 from ordersapp.models import Order, OrderItem
 from products.mixin import AddTitleToContextMixin, UserIsSuperuserMixin
@@ -14,10 +14,39 @@ from django.db import connection, transaction
 
 
 # Create your views here.
-class OrdertListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class OrderListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Order
     template_name = 'admins/admin-orders-read.html'
     title = 'Админка | Список заказов'
+
+
+class OrderCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+    model = Order
+    form_class = OrderCreateForm
+    template_name = 'admins/admin-orders-create.html'
+    success_url = reverse_lazy('admins:admin_orders')
+    title = 'Админка | Создание заказа'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderCreateView, self).get_context_data()
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemsForm, extra=1)
+
+        if self.request.POST:
+            context['orderitems'] = OrderFormSet(self.request.POST, instance=self.object)
+        else:
+            context['orderitems'] = OrderFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        orderitems = context['orderitems']
+
+        with transaction.atomic():
+            self.object = form.save()
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+        return super().form_valid(form)
 
 
 class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
