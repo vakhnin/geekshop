@@ -5,13 +5,21 @@
     <main>
         <div class="container-fluid">
             <h1 class="mt-4">Создание заказа</h1>
-            <div class="card-body order_form">
+            <div class="order_form">
                 <form action="{% url 'admins:admin_orders_create' %}" method="post"
                       enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col-lg-6">
-                            Пользователь: {{ order.user }}
+                            Пользователь: {{ form.user }}
+                        </div>
+                        <div class="col-lg-6">
+                            Статус: {{ form.status }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            Активный: {{ form.is_active }}
                         </div>
                     </div>
                     <div class="form-row">

@@ -68,7 +68,7 @@ $(document).ready(function () {
         orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
     }
 
-    $(document).on('change', '.order_form select', function () {
+    $(document).on('change', '.card-body select', function () {
         let target = event.target;
         orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-product', ''));
         let orderitem_product_pk = target.options[target.selectedIndex].value;
