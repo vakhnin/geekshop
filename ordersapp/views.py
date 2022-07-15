@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 # Create your views here.
@@ -68,6 +69,22 @@ class OrderCreate(CreateView, AddTitleToContextMixin, UserIsLoginMixin):
             if self.object.get_total_cost() == 0:
                 self.object.delete()
         return super(OrderCreate, self).form_valid(form)
+
+
+@login_required
+def order_create(request):
+    with transaction.atomic():
+        user_select = request.user
+
+        order = Order(user=user_select)
+        order.save()
+
+        baskets = Basket.objects.filter(user=user_select)
+        for basket in baskets:
+            order_item = OrderItem(order=order, product=basket.product, quantity=basket.quantity)
+            order_item.save()
+            basket.delete()
+    return HttpResponseRedirect(reverse('orders:list'))
 
 
 class OrderUpdate(UpdateView, AddTitleToContextMixin, UserIsLoginMixin):
