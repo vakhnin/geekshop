@@ -27,6 +27,9 @@ class OrderList(ListView, AddTitleToContextMixin, UserIsLoginMixin):
     model = Order
     title = 'GeekShop | Список заказов'
 
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
 
 @login_required
 def order_create(request):
