@@ -12,14 +12,14 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div class="h2 text-center">
+            <h2 class="text-center">
                 Ваши заказы,
                 {% if user.first_name %}
                 {{ user.first_name|title }}
                 {% else %}
                 Пользователь
                 {% endif %}
-            </div>
+            </h2>
             <table class="table orders_list">
                 <thead>
                 <tr>
@@ -64,7 +64,7 @@
 
 {% block footer %}
 <!-- Footer -->
-<footer class="py-5 bg-dark">
+<footer class="py-5 bg-dark fixed-bottom">
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2020</p>
     </div>
