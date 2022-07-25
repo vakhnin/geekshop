@@ -25,6 +25,10 @@ class UserAdminProfileForm(UserProfileForm):
     email = forms.EmailField(widget=forms.EmailInput())
     username = forms.CharField(widget=forms.TextInput())
 
+    class Meta:
+        model = ShopUser
+        fields = ('username', 'email', 'image', 'first_name', 'last_name', 'age', 'is_active')
+
     def __init__(self, *args, **kwargs):
         super(UserAdminProfileForm, self).__init__(*args, **kwargs)
 
