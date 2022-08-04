@@ -1,6 +1,6 @@
 {% if object.status == 'FM' %}
 <a href="{% url 'orders:delete' object.pk %}"
-   class="btn btn-info btn-round btn-warning form-control my-2 last">удалить</a>
+   class="btn btn-info btn-round btn-danger form-control my-2 last">удалить</a>
 {% endif %}
 <a href="{% url 'orders:list' %}" class="btn btn-info btn-round form-control my-2 last">
     к списку заказов

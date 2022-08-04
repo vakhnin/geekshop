@@ -4,23 +4,22 @@
 {% block css %}
 <!-- Bootstrap core CSS -->
 <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="/static/css/products.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <!-- Page Content -->
 <div class="container">
     <div class="row">
-        <div class="text-center">
-            <div class="category_delete">
-                <div class="h1">Уверены, что хотите удалить заказ?</div>
-                {% include 'ordersapp/includes/inc_order_summary.html' %}
-                <form action="{% url 'orders:delete' object.pk %}" method="post">
-                    {% csrf_token %}
-                    <input class="btn btn-danger" type="submit" value="удалить">
-                </form>
-                <a href="{% url 'orders:list' %}" class="btn btn-success mt-4">отмена</a>
-            </div>
-        </div>
+        <div class="h1">Уверены, что хотите удалить заказ?</div>
+        {% include 'ordersapp/includes/inc_order_summary.html' %}
     </div>
+    <form class="row" action="{% url 'orders:delete' object.pk %}" method="post">
+        {% csrf_token %}
+        <input class="btn btn-danger btn-round form-control my-2 last" type="submit" value="удалить">
+        <a href="{% url 'orders:list' %}" class="btn btn-success btn-round form-control my-2 last">отмена</a>
+    </form>
 </div>
 {% endblock %}
