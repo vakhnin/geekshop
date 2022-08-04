@@ -4,7 +4,7 @@
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid">
-            <h1 class="mt-4">Редактирование статуса заказа | {{ order.id }}</h1>
+            <h1 class="mt-4">Редактирование заказа | {{ order.id }}</h1>
             <div class="card-body order_form">
                 <form action="{% url 'admins:admin_orders_update' order.id %}" method="post"
                       enctype="multipart/form-data">
