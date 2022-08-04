@@ -41,7 +41,7 @@
         <div class="col-4">
             <div class="card mb-3">
                 <div class="card-body">
-                    <h4 class="float-left">Итого:</h4>
+                    <h4 class="float-left">Итого</h4>
                 </div>
                 <div class="card-footer">
                     <h5 class="float-left">Товаров:</h5>
@@ -54,7 +54,7 @@
                     <h5 class="float-right">{{ baskets.0.total_sum }} руб.</h5>
                 </div>
             </div>
-            <a href="{% url 'orders:create' %}" class="btn btn-success btn-lg float-right">Оформить</a>
+            <a href="{% url 'orders:create' %}" class="btn btn-success btn-round form-control my-2 last">Оформить</a>
         </div>
     </div>
     {% else %}

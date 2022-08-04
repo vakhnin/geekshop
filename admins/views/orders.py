@@ -53,7 +53,7 @@ class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     model = Order
     template_name = 'admins/admin-orders-update-delete.html'
     form_class = OrderUpdateForm
-    title = 'Админка | Обновление статуса заказа'
+    title = 'Админка | Редактирование заказа'
     success_url = reverse_lazy('admins:admin_orders')
 
     def get_context_data(self, **kwargs):

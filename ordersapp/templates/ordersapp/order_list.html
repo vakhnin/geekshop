@@ -4,21 +4,22 @@
 {% block css %}
 <!-- Bootstrap core CSS -->
 <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/products.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <!-- Page Content -->
 <div class="container">
     <div class="row">
-        <div class="text-center">
-            <div class="h2 text-center head">
+        <div class="col-12">
+            <h4 class="mt-3 mb-3 d-flex justify-content-between align-items-center mb-3">
                 Ваши заказы,
                 {% if user.first_name %}
                 {{ user.first_name|title }}
                 {% else %}
                 Пользователь
                 {% endif %}
-            </div>
+            </h4>
             <table class="table orders_list">
                 <thead>
                 <tr>
@@ -26,6 +27,8 @@
                     <th>Создан</th>
                     <th>Обновлен</th>
                     <th>Статус</th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -53,15 +56,20 @@
                 {% endfor %}
                 </tbody>
             </table>
-
-            <a href="{% url 'orders:create' %}"
-               class="btn btn-success btn-round form-control w-25 my-2 last">
-                новый заказ
-            </a>
             <a href="{% url 'products:index' %}" class="btn btn-info btn-round form-control  my-2 last">
                 продолжить покупки
             </a>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+<!-- Footer -->
+<footer class="py-5 bg-dark fixed-bottom">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2020</p>
+    </div>
+    <!-- /.container -->
+</footer>
 {% endblock %}
