@@ -1,14 +1,33 @@
 version: '3.1'
 
 services:
+  db:
+    image: postgres:13.1
+    privileged: true
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: geekbrains
+      POSTGRES_PASSWORD: geekbrains
+      POSTGRES_DB: geekshop
+
+  adminer:
+    image: adminer:4.7.8-standalone
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
   django_server:
     container_name: 'backend_django_now'
     build:
       context: ..
     image: backend_django:1.0.0
     ports:
-      - 80:80
+      - 8000:8000
     command: > 
       bash -c "python manage.py migrate
       && python manage.py fill_db 
-      && python manage.py runserver 0.0.0.0:80"
+      && python manage.py collectstatic --noinput
+      && gunicorn geekshop.wsgi -b 0.0.0.0:8000"

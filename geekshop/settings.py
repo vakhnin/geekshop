@@ -28,7 +28,7 @@ if not SECRET_KEY:
     SECRET_KEY = 'django-insecure-10i#4amk$x2tto=+if#cdym!()93we1(bu%crd8*zt$8*msvj('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -93,13 +93,16 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-SERVER = False
+SERVER = True
 if SERVER:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'geekshop',
-            'USER': 'postgres',
+            'PASSWORD': 'geekbrains',
+            'USER': 'geekbrains',
+            'HOST': 'db',
+            'PORT': '5432',
         }
     }
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
