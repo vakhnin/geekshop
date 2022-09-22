@@ -1,4 +1,4 @@
-version: '3.1'
+version: '2.10'
 
 services:
   db:
@@ -11,13 +11,19 @@ services:
       POSTGRES_PASSWORD: geekbrains
       POSTGRES_DB: geekshop
 
+  db_check:
+    build: ./db_check
+    depends_on:
+      - db
+
+
   adminer:
     image: adminer:4.7.8-standalone
     restart: always
     ports:
       - 8080:8080
     depends_on:
-      - db
+      - db_check
 
   django_server:
     container_name: 'backend_django_now'
@@ -35,7 +41,7 @@ services:
       && python manage.py collectstatic --noinput
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
     depends_on:
-      - db
+      - db_check
 
   nginx:
     build: ./nginx
