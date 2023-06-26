@@ -33,6 +33,9 @@
                     </a>
                 </li>
                 {% if request.user.is_authenticated %}
+                {% with authenticated=True %}
+                {{ authenticated|json_script:"user-authenticated" }}
+                {% endwith %}
                 <li class="nav-item">
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle
@@ -69,7 +72,8 @@
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auth:login' %}">Войти/Зарегистрироваться
+                    <a class="nav-link" href="{% url 'auth:login' %}">
+                        Войти/Зарегистрироваться
                         <i class="fas fa-sign-in-alt"></i></a>
                 </li>
                 {% endif %}
@@ -94,6 +98,19 @@
 
 {% block footer %}
 {% endblock %}
+
+<div class="toast-container position-fixed top-50 start-50 translate-middle p-3">
+    <div id="authenticated-live-toast" class="toast" role="alert" aria-live="assertive"
+         aria-atomic="true" data-bs-autohide="false">
+        <div class="toast-header">
+            <strong class="me-auto">Необходимо авторизоваться</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+        </div>
+        <div class="toast-body">
+            Для добавления товара в корзину необходимо авторизоваться
+        </div>
+    </div>
+</div>
 
 {% block javascript %}
 <!-- Bootstrap core JavaScript -->

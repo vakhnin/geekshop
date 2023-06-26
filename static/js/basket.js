@@ -2,7 +2,17 @@ $(document).ready(function () {
     "use strict";
 
     $('.card_add_basket').on('click', 'button[type="button"]', () => {
-        let t_href = event.target.value
+        let t_href = event.target.value;
+        const user_authenticated = document.getElementById('user-authenticated');
+
+        if (!user_authenticated) {
+            const toastLiveAuthenticated = document.getElementById('authenticated-live-toast');
+            const toast = new bootstrap.Toast(toastLiveAuthenticated);
+
+            toast.show();
+            return
+        }
+
         $.ajax(
             {
                 url: "/baskets/add/" + t_href + "/",
