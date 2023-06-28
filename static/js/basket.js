@@ -6,10 +6,7 @@ $(document).ready(function () {
         const user_authenticated = document.getElementById('user-authenticated');
 
         if (!user_authenticated) {
-            const toastLiveAuthenticated = document.getElementById('authenticated-live-toast');
-            const toast = new bootstrap.Toast(toastLiveAuthenticated);
-
-            toast.show();
+            $('#authenticated-modal').modal('show');
             return
         }
 
