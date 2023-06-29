@@ -15,6 +15,9 @@ $(document).ready(function () {
                 url: "/baskets/add/" + t_href + "/",
                 success: (data) => {
                     $('.total-quantity-navigation').text(data.total_quantity);
+                    if (data.no_product) {
+                        $('#no-product-modal').modal('show');
+                    }
                 },
             });
         event.preventDefault()

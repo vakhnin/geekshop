@@ -1,13 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.db import connection
-from django.db.models import F
 from django.http import JsonResponse, HttpResponseRedirect
 # Create your views here.
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy
-from django.views.generic import DeleteView, DetailView, TemplateView
+from django.views.generic import TemplateView
 
-from authapp.models import ShopUser
 from baskets.models import Basket
 from products.mixin import UserIsLoginMixin, AddTitleToContextMixin
 from products.models import Product
@@ -27,19 +23,22 @@ def basket_add(request, id):
     if is_ajax(request=request):
         user_select = request.user
         product = Product.objects.get(id=id)
-        baskets = Basket.objects.filter(user=user_select, product=product)
-        if baskets:
-            basket = baskets.first()
-            basket.quantity = F('quantity') + 1
-            basket.save()
-        else:
-            Basket.objects.create(user=user_select, product=product, quantity=1)
+
+        if product.quantity > 0:
+            baskets = Basket.objects.filter(user=user_select, product=product)
+            if baskets:
+                basket = baskets.first()
+                basket.quantity += 1
+                basket.save()
+            else:
+                Basket.objects.create(user=user_select, product=product, quantity=1)
 
         baskets = Basket.objects.filter(user=request.user)
         total_quantity = 0
         for bask in baskets:
             total_quantity += bask.quantity
-        return JsonResponse({'total_quantity': total_quantity})
+        return JsonResponse({'no_product': product.quantity <= 0,
+                             'total_quantity': total_quantity})
 
 
 @login_required
