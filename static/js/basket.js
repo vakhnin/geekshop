@@ -23,14 +23,26 @@ $(document).ready(function () {
         event.preventDefault()
     });
 
-    $('.basket_list').on('click', 'input[type="number"]', () => {
-        let t_href = event.target
+    $('.basket_list').on('click', 'button', () => {
+        let t_href = $(event.target)
+
+        let action = "no-action"
+        if (t_href.hasClass("increase-count")) {
+            action = "increase-count"
+        }
+        if (t_href.hasClass("decrease-count")) {
+            action = "decrease-count"
+        }
+
         $.ajax(
             {
-                url: "/baskets/edit/" + t_href.name + "/" + t_href.value + "/",
+                url: "/baskets/edit/" + t_href.attr("name") + "/" + action + "/",
                 success: (data) => {
                     $('.basket_list').html(data.result);
                     $('.total-quantity-navigation').text($('.total-quantity').text());
+                    if (data.no_product) {
+                        $('#no-product-modal').modal('show');
+                    }
                 },
             });
         event.preventDefault()

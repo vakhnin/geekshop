@@ -22,12 +22,29 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item bg-light">
                         <div class="row text-center">
-                            <div class="col-lg-4">
-                                <input name="{{ basket.id }}" type="number" class="form-control"
-                                       value="{{ basket.quantity }}" min="0">
+                            <div class="col-lg-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <button name="{{ basket.id }}"
+                                                class="btn btn-outline-secondary font-weight-bold decrease-count"
+                                                type="button"> -
+                                        </button>
+                                    </div>
+                                    <input name="{{ basket.id }}" type="text" class="form-control text-right"
+                                           value="{{ basket.quantity }}" min="0" disabled>
+                                    <div class="input-group-append">
+                                        <button name="{{ basket.id }}"
+                                                class="btn btn-outline-secondary font-weight-bold increase-count"
+                                                type="button"> +
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-4">{{ basket.sum }}</div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-1">x</div>
+                            <div class="col-lg-3">{{ basket.product.price }} руб</div>
+                            <div class="col-lg-1">=</div>
+                            <div class="col-lg-3">{{ basket.sum }} руб</div>
+                            <div class="col-lg-1">
                                 <a href="{% url 'baskets:basket_remove' basket.id %}">
                                     <i class="fas fa-trash"></i>
                                 </a>

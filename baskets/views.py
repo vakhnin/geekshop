@@ -8,6 +8,9 @@ from baskets.models import Basket
 from products.mixin import UserIsLoginMixin, AddTitleToContextMixin
 from products.models import Product
 
+INCREASE_PRODUCT_ACTION = 'increase-count'
+DECREASE_PRODUCT_ACTION = 'decrease-count'
+
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -42,19 +45,27 @@ def basket_add(request, id):
 
 
 @login_required
-def basket_edit(request, id_basket, quantity):
+def basket_edit(request, id_basket, action):
     if is_ajax(request=request):
+        no_product = False
         basket = Basket.objects.get(id=id_basket)
-        if quantity > 0:
-            basket.quantity = quantity
+        product = Product.objects.get(id=basket.product.id)
+
+        if action == DECREASE_PRODUCT_ACTION and basket.quantity > 1:
+            basket.quantity -= 1
             basket.save()
-        else:
-            basket.delete()
+        elif action == INCREASE_PRODUCT_ACTION:
+            if product.quantity > 0:
+                basket.quantity += 1
+                basket.save()
+            else:
+                no_product = True
 
         baskets = Basket.objects.filter(user=request.user)
         context = {'baskets': baskets}
         result = render_to_string('baskets/includes/inc_basket.html', context)
-        return JsonResponse({'result': result})
+        return JsonResponse({'no_product': no_product,
+                             'result': result})
 
 
 @login_required
