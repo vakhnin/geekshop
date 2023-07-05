@@ -5,6 +5,12 @@ body {
     background-size: cover;
     -o-background-size: cover;
     padding-top: 56px;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.navbar {
+    width: 100vw;
 }
 
 #start-purchase-btn {

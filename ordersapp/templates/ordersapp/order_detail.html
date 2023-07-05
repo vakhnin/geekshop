@@ -6,12 +6,12 @@
 <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="/static/css/products.css" rel="stylesheet">
+<link href="/static/css/style.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <!-- Page Content -->
-<div class="container">
+<div class="container flex-grow-1">
     <h4>Заказ №{{ object.pk }}</h4>
     <div class="card">
         {% include 'ordersapp/includes/inc_order_summary.html' %}
