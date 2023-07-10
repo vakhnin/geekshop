@@ -12,7 +12,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 
 from geekshop import settings
-from products.mixin import AddTitleToContextMixin, UserIsLoginMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsLoginMixin
 from baskets.models import Basket
 from ordersapp.forms import OrderItemsForm
 from ordersapp.models import Order, OrderItem
@@ -23,9 +23,10 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-class OrderList(ListView, AddTitleToContextMixin, UserIsLoginMixin):
+class OrderList(ListView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
     model = Order
     title = 'GeekShop | Список заказов'
+    nav_active = 'user'
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
@@ -47,15 +48,17 @@ def order_create(request):
     return HttpResponseRedirect(reverse('orders:list'))
 
 
-class OrderRead(DetailView, AddTitleToContextMixin, UserIsLoginMixin):
+class OrderRead(DetailView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
     model = Order
     title = 'GeekShop | Просмотр заказа'
+    nav_active = 'user'
 
 
-class OrderDelete(DeleteView, AddTitleToContextMixin, UserIsLoginMixin):
+class OrderDelete(DeleteView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
     model = Order
     success_url = reverse_lazy('orders:list')
     title = 'GeekShop | Удаление заказа'
+    nav_active = 'user'
 
 
 def order_forming_complete(request, pk):

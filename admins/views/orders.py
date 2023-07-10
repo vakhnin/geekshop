@@ -6,7 +6,7 @@ from django.views.generic import ListView, UpdateView, DeleteView, CreateView
 from admins.forms import OrderUpdateForm, OrderCreateForm
 from admins.forms import OrderItemsForm
 from ordersapp.models import Order, OrderItem
-from products.mixin import AddTitleToContextMixin, UserIsSuperuserMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin
 from products.models import ProductCategory
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
@@ -14,13 +14,13 @@ from django.db import connection, transaction
 
 
 # Create your views here.
-class OrderListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class OrderListView(ListView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = Order
     template_name = 'admins/admin-orders-read.html'
     title = 'Админка | Список заказов'
 
 
-class OrderCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class OrderCreateView(CreateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = Order
     form_class = OrderCreateForm
     template_name = 'admins/admin-orders-create.html'
@@ -49,7 +49,7 @@ class OrderCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
         return super().form_valid(form)
 
 
-class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class OrderUpdateView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = Order
     template_name = 'admins/admin-orders-update-delete.html'
     form_class = OrderUpdateForm
@@ -86,7 +86,7 @@ class OrderUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
         return super().form_valid(form)
 
 
-class OrderDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class OrderDeleteView(DeleteView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = Order
     success_url = reverse_lazy('admins:admin_orders')
 

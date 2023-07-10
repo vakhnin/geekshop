@@ -4,11 +4,11 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
 from authapp.models import ShopUser
-from products.mixin import AddTitleToContextMixin, UserIsSuperuserMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin
 
 
 # Create your views here.
-class UserCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class UserCreateView(CreateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = ShopUser
     template_name = 'admins/admin-users-create.html'
     form_class = UserAdminRegisterForm
@@ -16,13 +16,13 @@ class UserCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     title = 'Админка | Создать пользователя'
 
 
-class UserListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class UserListView(ListView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = ShopUser
     template_name = 'admins/admin-users-read.html'
     title = 'Админка | Пользователи'
 
 
-class UserUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class UserUpdateView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = ShopUser
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm
@@ -30,7 +30,7 @@ class UserUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
     title = 'Админка | Обновление пользователя'
 
 
-class UserDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class UserDeleteView(DeleteView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = ShopUser
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm

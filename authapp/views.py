@@ -12,10 +12,10 @@ from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, User
 from authapp.models import ShopUser
 from baskets.models import Basket
 from geekshop import settings
-from products.mixin import AddTitleToContextMixin, UserIsLoginMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsLoginMixin
 
 
-class UserLoginView(FormView, AddTitleToContextMixin):
+class UserLoginView(FormView, AddTitleAndNavActiveToContextMixin):
     model = ShopUser
     form_class = UserLoginForm
     success_url = reverse_lazy('main')
@@ -117,8 +117,9 @@ def verify(request, email, activate_key):
         return HttpResponseRedirect(reverse('authapp:login'))
 
 
-class UserDetailView(UpdateView, AddTitleToContextMixin, UserIsLoginMixin):
+class UserDetailView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
     title = 'Geekshop - Профиль'
+    nav_active = 'user'
     model = ShopUser
     form_class = UserProfileForm
     success_url = reverse_lazy('authapp:profile')

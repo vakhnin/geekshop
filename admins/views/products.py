@@ -3,12 +3,12 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from admins.forms import ProductAdminForm
-from products.mixin import AddTitleToContextMixin, UserIsSuperuserMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin
 from products.models import Product
 
 
 # Create your views here.
-class ProductCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class ProductCreateView(CreateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = Product
     template_name = 'admins/admin-products-create.html'
     success_url = reverse_lazy('admins:admin_products')
@@ -16,13 +16,13 @@ class ProductCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin
     title = 'Админка | Создание продукта'
 
 
-class ProductListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class ProductListView(ListView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = Product
     template_name = 'admins/admin-products-read.html'
     title = 'Админка | Список продуктов'
 
 
-class ProductUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class ProductUpdateView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = Product
     template_name = 'admins/admin-products-update-delete.html'
     form_class = ProductAdminForm
@@ -30,7 +30,7 @@ class ProductUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin
     success_url = reverse_lazy('admins:admin_products')
 
 
-class ProductDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class ProductDeleteView(DeleteView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = Product
     success_url = reverse_lazy('admins:admin_products')
 

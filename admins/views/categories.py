@@ -4,12 +4,12 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from admins.forms import ProductCategoryAdminForm
-from products.mixin import AddTitleToContextMixin, UserIsSuperuserMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin
 from products.models import ProductCategory
 from django.db import connection
 
 
-class CategoryCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class CategoryCreateView(CreateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = ProductCategory
     template_name = 'admins/admin-categories-create.html'
     success_url = reverse_lazy('admins:admin_categories')
@@ -17,13 +17,13 @@ class CategoryCreateView(CreateView, AddTitleToContextMixin, UserIsSuperuserMixi
     title = 'Админка | Создание категории'
 
 
-class CategoryListView(ListView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class CategoryListView(ListView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = ProductCategory
     template_name = 'admins/admin-categories-read.html'
     title = 'Админка | Список категорий'
 
 
-class CategoryUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class CategoryUpdateView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = ProductCategory
     template_name = 'admins/admin-categories-update-delete.html'
     form_class = ProductCategoryAdminForm
@@ -39,7 +39,7 @@ class CategoryUpdateView(UpdateView, AddTitleToContextMixin, UserIsSuperuserMixi
         return super().form_valid(form)
 
 
-class CategoryDeleteView(DeleteView, AddTitleToContextMixin, UserIsSuperuserMixin):
+class CategoryDeleteView(DeleteView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
     model = ProductCategory
     success_url = reverse_lazy('admins:admin_categories')
 

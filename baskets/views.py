@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView
 
 from baskets.models import Basket
-from products.mixin import UserIsLoginMixin, AddTitleToContextMixin
+from products.mixin import UserIsLoginMixin, AddTitleAndNavActiveToContextMixin
 from products.models import Product
 
 INCREASE_PRODUCT_ACTION = 'increase-count'
@@ -16,8 +16,9 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-class BasketView(TemplateView, AddTitleToContextMixin, UserIsLoginMixin):
+class BasketView(TemplateView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
     title = 'Geekshop - Корзина'
+    nav_active = 'basket'
     template_name = 'baskets/basket.html'
 
 
