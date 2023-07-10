@@ -13,7 +13,7 @@ $(document).ready(function () {
             method: "POST",
             headers: {"X-CSRFToken": csrftoken},
             mode: "same-origin",
-            url: "auth/login/",
+            url: "/auth/login/",
             data: {
                 username: $("#username").val(),
                 password:  $("#password").val()
