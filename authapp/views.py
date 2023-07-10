@@ -1,14 +1,16 @@
 from django.contrib import auth, messages
 from django.contrib.auth.views import LogoutView
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 # Create your views here.
 from authapp.models import ShopUser
+from baskets.models import Basket
 from geekshop import settings
 from products.mixin import AddTitleToContextMixin, UserIsLoginMixin
 
@@ -32,6 +34,29 @@ class UserLoginView(FormView, AddTitleToContextMixin):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+def user_login_view(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = auth.authenticate(username=username, password=password)
+        if user and user.is_active:
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+        baskets = Basket.objects.filter(user=user)
+        context = {
+            'user_is_authenticated': user is not None,
+            'user': user,
+            'baskets': baskets}
+        content = render_to_string('products/includes/navbar.html', context)
+
+        error = ''
+        if user is None:
+            error = 'Неверные логин или пароль'
+
+        return JsonResponse({'error': error,
+                             'content': content})
 
 
 class UserRegisterView(FormView):
