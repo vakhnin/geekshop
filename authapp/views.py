@@ -107,7 +107,7 @@ def user_register_view(request):
         post_dict = request.POST.dict()
 
         if key_not_in_dict_or_empty_value(post_dict, 'username'):
-            error = 'Поле "Имя пользователя" должно быть заполнено.'
+            error = 'Поле "Логин" должно быть заполнено.'
         elif ShopUser.objects.filter(username=post_dict['username']):
             error = 'Пользователь с таким логином уже существует.'
         elif key_not_in_dict_or_empty_value(post_dict, 'email'):
