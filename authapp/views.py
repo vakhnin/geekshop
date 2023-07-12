@@ -91,6 +91,55 @@ class UserRegisterView(FormView):
         return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=True)
 
 
+def key_not_in_dict_or_empty_value(dict_, key):
+    if key not in list(dict_.keys()):
+        return True
+    elif not dict_[key]:
+        return True
+    else:
+        return False
+
+
+def user_register_view(request):
+    if request.method == "POST":
+        error = ''
+        user = None
+        post_dict = request.POST.dict()
+
+        if key_not_in_dict_or_empty_value(post_dict, 'username'):
+            error = 'Поле "Имя пользователя" должно быть заполнено.'
+        elif ShopUser.objects.filter(username=post_dict['username']):
+            error = 'Пользователь с таким логином уже существует.'
+        elif key_not_in_dict_or_empty_value(post_dict, 'email'):
+            error = 'Поле "Адрес электронной почты" должно быть заполнено.'
+        elif ShopUser.objects.filter(email=post_dict['email']):
+            error = 'Пользователь с таким адресом электронной почты уже существует.'
+        elif key_not_in_dict_or_empty_value(post_dict, 'password1'):
+            error = 'Поле "Пароль" должно быть заполнено.'
+        elif key_not_in_dict_or_empty_value(post_dict, 'password2'):
+            error = 'Поле "Подтверждение пароля" должно быть заполнено.'
+        elif post_dict['password1'] != post_dict['password2']:
+            error = '"Пароль" и "Подтверждение пароля" не совпадают.'
+        else:
+            try:
+                post_dict['password'] = post_dict['password1']
+                del (post_dict['password1'])
+                del (post_dict['password2'])
+                user = ShopUser.objects.create_user(**post_dict)
+                auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            except (ValueError, TypeError, KeyError) as e:
+                error = 'Неизвестная ошибка. Обратитесь к разработчику.'
+                print(e)
+
+        context = {
+            'user_is_authenticated': user is not None,
+            'user': user,
+            'baskets': None}
+        content = render_to_string('products/includes/navbar.html', context)
+        return JsonResponse({'error': error,
+                             'content': content})
+
+
 def verify(request, email, activate_key):
     try:
         user = ShopUser.objects.get(email=email)
