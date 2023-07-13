@@ -35,6 +35,8 @@ services:
     volumes:
       - media_volume:/media
       - static_volume:/static
+    environment:
+      - GEEKSHOP_ON_SERVER=True
     command: >
       bash -c "python manage.py migrate
       && python manage.py fill_db 

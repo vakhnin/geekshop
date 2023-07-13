@@ -29,6 +29,8 @@ if not SECRET_KEY:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+if os.getenv('GEEKSHOP_ON_SERVER') == 'True':
+    DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -94,6 +96,9 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 SERVER = False
+if os.getenv('GEEKSHOP_ON_SERVER') == 'True':
+    SERVER = True
+
 if SERVER:
     DATABASES = {
         'default': {
