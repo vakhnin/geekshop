@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
 
     <title>{{ title|title }}</title>
 
@@ -16,74 +17,126 @@
 </head>
 
 <body>
+{% csrf_token %}
+
 {% block navigation %}
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'main' %}">GeekShop</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link{% if request.path|startswith:'/products/' %} active{% endif %}"
-                       href="{% url 'products:index' %}">Каталог <i class="fas fa-shopping-bag"></i>
-                    </a>
-                </li>
-                {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle
-                        {% if request.path|startswith:'/auth/profile/' or request.path|startswith:'/orders/' %}
-                        active{% endif %}" href="" data-toggle="dropdown">
-                            {{ user.username|default:'Пользователь' }}
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="nav-link text-dark" href="{% url 'authapp:profile' %}">
-                                    Профиль
-                                </a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" href="{% url 'orders:list' %}">
-                                    Заказы
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auth:logout' %}">Выйти
-                        <i class="fas fa-sign-out-alt"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link{% if request.path|startswith:'/baskets/' %} active{% endif %}"
-                       href="{% url 'baskets:main' %}">Корзина
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="badge badge-secondary badge-pill
-                        total-quantity-navigation">{{ baskets.0.total_quantity }}</span>
-                    </a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auth:login' %}">Войти/Зарегистрироваться
-                        <i class="fas fa-sign-in-alt"></i></a>
-                </li>
-                {% endif %}
-                {% if user.is_superuser %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'admins:index' %}">
-                        <i class="fas fa-users-cog"></i>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
+    <div class="container" id="navbar">
+        {% include 'products/includes/navbar.html' %}
     </div>
 </nav>
+
+<div id="login-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="card rounded-lg">
+                <div class="card-header">
+                    <h3 class="text-center my-4">
+                        Вход
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-danger small error-div"></div>
+                    <div class="form-group">
+                        <label class="small" for="username">Логин</label>
+                        <input type="text" maxlength="150" class="form-control " id="username">
+                    </div>
+                    <div class="form-group">
+                        <label class="small" for="password">Пароль</label>
+                        <input type="password" maxlength="150" class="form-control " id="password">
+                    </div>
+                    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                        <a class="" href="#">Забыли пароль?</a>
+                        <input id="login" class="btn btn-primary" type="submit" value="Войти">
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a class="nav-link" href="#" type="button"
+                       data-target="#registration-modal" data-toggle="modal" data-dismiss="modal">
+                        Нужен аккаунт? Зарегистрируйся!
+                    </a>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/">
+                        Войти через <i class="fab fa-vk"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="registration-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="card rounded-lg">
+                <div class="card-header">
+                    <h3 class="text-center my-4">
+                        Создать аккаунт
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-danger small error-div"></div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small" for="first_name">Имя</label>
+                                <input type="text" maxlength="150" class="form-control " id="first_name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small" for="last_name">Фамилия</label>
+                                <input type="text" maxlength="150" class="form-control " id="last_name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <label class="small" for="username-reg">Логин</label>
+                            <input type="text" maxlength="150" class="form-control " id="username-reg">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small" for="email">Адрес электронной почты</label>
+                            <input type="text" maxlength="150" class="form-control " id="email">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small" for="password1">Пароль</label>
+                                <input type="password" maxlength="150" class="form-control " id="password1">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small" for="password2">Подтверждение пароля</label>
+                                <input type="password" maxlength="150" class="form-control " id="password2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input id="registration" class="btn btn-primary btn-block"
+                               type="submit" value="Создать аккаунт">
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a class="nav-link" href="#" type="button"
+                       data-target="#login-modal" data-toggle="modal" data-dismiss="modal">
+                        Уже есть аккаунт? Войти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block menu %}
@@ -93,7 +146,45 @@
 {% endblock %}
 
 {% block footer %}
+<!-- Footer -->
+<footer class="py-4 mt-3 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2023</p>
+    </div>
+</footer>
 {% endblock %}
+
+<div id="authenticated-modal" class="modal" tabindex="-1" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Необходима авторизация</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Для добавления товара в корзину необходимо авторизоваться</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="no-product-modal" class="modal" tabindex="-1" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Невозможно добавить товар в корзину</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Товар отсутствует на складе</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% block javascript %}
 <!-- Bootstrap core JavaScript -->
@@ -101,6 +192,7 @@
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
 <script src="{% static  'js/basket.js' %}"></script>
+<script src="{% static  'js/auth.js' %}"></script>
 
 <script src="{% static 'js/jquery.formset.js' %}"></script>
 <script src="{% static 'js/orders_scripts.js' %}"></script>

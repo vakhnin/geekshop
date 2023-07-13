@@ -10,12 +10,14 @@ class UserIsSuperuserMixin(View):
         return super(UserIsSuperuserMixin, self).dispatch(request, *args, **kwargs)
 
 
-class AddTitleToContextMixin(ContextMixin):
+class AddTitleAndNavActiveToContextMixin(ContextMixin):
     title = ''
+    nav_active = ''
 
     def get_context_data(self, **kwargs):
-        context = super(AddTitleToContextMixin, self).get_context_data(**kwargs)
+        context = super(AddTitleAndNavActiveToContextMixin, self).get_context_data(**kwargs)
         context['title'] = self.title
+        context['nav_active'] = self.nav_active
         return context
 
 

@@ -1,19 +1,21 @@
 from django.contrib import auth, messages
 from django.contrib.auth.views import LogoutView
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 # Create your views here.
 from authapp.models import ShopUser
+from baskets.models import Basket
 from geekshop import settings
-from products.mixin import AddTitleToContextMixin, UserIsLoginMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsLoginMixin
 
 
-class UserLoginView(FormView, AddTitleToContextMixin):
+class UserLoginView(FormView, AddTitleAndNavActiveToContextMixin):
     model = ShopUser
     form_class = UserLoginForm
     success_url = reverse_lazy('main')
@@ -32,6 +34,29 @@ class UserLoginView(FormView, AddTitleToContextMixin):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+def user_login_view(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = auth.authenticate(username=username, password=password)
+        if user and user.is_active:
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+        baskets = Basket.objects.filter(user=user)
+        context = {
+            'user_is_authenticated': user is not None,
+            'user': user,
+            'baskets': baskets}
+        content = render_to_string('products/includes/navbar.html', context)
+
+        error = ''
+        if user is None:
+            error = 'Неверные логин или пароль'
+
+        return JsonResponse({'error': error,
+                             'content': content})
 
 
 class UserRegisterView(FormView):
@@ -66,6 +91,55 @@ class UserRegisterView(FormView):
         return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=True)
 
 
+def key_not_in_dict_or_empty_value(dict_, key):
+    if key not in list(dict_.keys()):
+        return True
+    elif not dict_[key]:
+        return True
+    else:
+        return False
+
+
+def user_register_view(request):
+    if request.method == "POST":
+        error = ''
+        user = None
+        post_dict = request.POST.dict()
+
+        if key_not_in_dict_or_empty_value(post_dict, 'username'):
+            error = 'Поле "Логин" должно быть заполнено.'
+        elif ShopUser.objects.filter(username=post_dict['username']):
+            error = 'Пользователь с таким логином уже существует.'
+        elif key_not_in_dict_or_empty_value(post_dict, 'email'):
+            error = 'Поле "Адрес электронной почты" должно быть заполнено.'
+        elif ShopUser.objects.filter(email=post_dict['email']):
+            error = 'Пользователь с таким адресом электронной почты уже существует.'
+        elif key_not_in_dict_or_empty_value(post_dict, 'password1'):
+            error = 'Поле "Пароль" должно быть заполнено.'
+        elif key_not_in_dict_or_empty_value(post_dict, 'password2'):
+            error = 'Поле "Подтверждение пароля" должно быть заполнено.'
+        elif post_dict['password1'] != post_dict['password2']:
+            error = '"Пароль" и "Подтверждение пароля" не совпадают.'
+        else:
+            try:
+                post_dict['password'] = post_dict['password1']
+                del (post_dict['password1'])
+                del (post_dict['password2'])
+                user = ShopUser.objects.create_user(**post_dict)
+                auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            except (ValueError, TypeError, KeyError) as e:
+                error = 'Неизвестная ошибка. Обратитесь к разработчику.'
+                print(e)
+
+        context = {
+            'user_is_authenticated': user is not None,
+            'user': user,
+            'baskets': None}
+        content = render_to_string('products/includes/navbar.html', context)
+        return JsonResponse({'error': error,
+                             'content': content})
+
+
 def verify(request, email, activate_key):
     try:
         user = ShopUser.objects.get(email=email)
@@ -92,8 +166,9 @@ def verify(request, email, activate_key):
         return HttpResponseRedirect(reverse('authapp:login'))
 
 
-class UserDetailView(UpdateView, AddTitleToContextMixin, UserIsLoginMixin):
+class UserDetailView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
     title = 'Geekshop - Профиль'
+    nav_active = 'user'
     model = ShopUser
     form_class = UserProfileForm
     success_url = reverse_lazy('authapp:profile')

@@ -8,5 +8,5 @@ urlpatterns = [
     path('', BasketView.as_view(), name='main'),
     path('add/<int:id>/', basket_add, name='basket_add'),
     path('remove/<int:pk>/', basket_remove, name='basket_remove'),
-    path('edit/<int:id_basket>/<int:quantity>/', basket_edit, name='basket_edit'),
+    path('edit/<int:id_basket>/<slug:action>/', basket_edit, name='basket_edit'),
 ]

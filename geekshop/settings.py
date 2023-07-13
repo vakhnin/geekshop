@@ -28,7 +28,9 @@ if not SECRET_KEY:
     SECRET_KEY = 'django-insecure-10i#4amk$x2tto=+if#cdym!()93we1(bu%crd8*zt$8*msvj('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+if os.getenv('GEEKSHOP_ON_SERVER') == 'True':
+    DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -93,7 +95,10 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-SERVER = True
+SERVER = False
+if os.getenv('GEEKSHOP_ON_SERVER') == 'True':
+    SERVER = True
+
 if SERVER:
     DATABASES = {
         'default': {
@@ -200,13 +205,13 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 if DEBUG:
-    def show_toolbar(request):
-        return True
+    # def show_toolbar(request):
+    #     return True
 
 
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': show_toolbar,
-    }
+    # DEBUG_TOOLBAR_CONFIG = {
+    #     'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+    # }
 
     DEBUG_TOOLBAR_PANELS = [
         'debug_toolbar.panels.versions.VersionsPanel',
