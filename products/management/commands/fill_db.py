@@ -1,11 +1,13 @@
+import json
+import os
+
 from django.core.management.base import BaseCommand
+
 from authapp.models import ShopUser
-
-import json, os
-
 from products.models import ProductCategory, Product
 
 JSON_PATH = 'products' + os.sep + 'fixtures'
+
 
 def load_from_json(file_name):
     with open(os.path.join(JSON_PATH, file_name + '.json'), 'r', encoding='utf-8') as infile:
@@ -35,10 +37,8 @@ class Command(BaseCommand):
             new_category.save()
 
         # Создаем суперпользователя при помощи менеджера модели
-        if not ShopUser.objects.filter(username='geekbrains'):
-            super_user = \
-                ShopUser.objects.create_superuser(username='geekbrains',
-                                              email='geekbrains@geekshop.local',
-                                              password='geekbrains',
+        if not ShopUser.objects.filter(username='admin'):
+            ShopUser.objects.create_superuser(username='admin',
+                                              email='admin@admin.local',
+                                              password='admin',
                                               age=33)
-
