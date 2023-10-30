@@ -20,6 +20,11 @@ class ProductListView(ListView, AddTitleAndNavActiveToContextMixin):
     paginate_by = 3
     ordering = ['-id']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['id_category'] = 0
+        return context
+
 
 class CategoryProductListView(ListView, AddTitleAndNavActiveToContextMixin):
     context_object_name = 'products'
@@ -27,6 +32,12 @@ class CategoryProductListView(ListView, AddTitleAndNavActiveToContextMixin):
     template_name = 'products/products.html'
     title = 'geekshop - Каталог'
     nav_active = 'catalog'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id_category = self.kwargs['id_category']
+        context['id_category'] = id_category
+        return context
 
     def get_queryset(self):
         return Product.objects. \

@@ -29,7 +29,7 @@
                             <th>Создан</th>
                             <th>Обновлен</th>
                             <th>Статус</th>
-                            <th>Посмотреть</th>
+                            <th>Детали заказа</th>
                             <th>Удалить</th>
                         </tr>
                         </thead>
@@ -43,13 +43,13 @@
                             <td>{{ item.get_status_display }}</td>
                             <td>
                                 <a href="{% url 'orders:read' item.pk %}">
-                                    посмотреть
+                                    Посмотреть детали заказа
                                 </a>
                             </td>
                             <td class="text-center">
                                 {% if item.status == 'FM' %}
                                 <a href="{% url 'orders:delete' item.pk %}">
-                                    <i class="fas fa-trash" aria-hidden="true"></i>
+                                    <i class="fas fa-trash text-danger" aria-hidden="true"></i>
                                 </a>
                                 {% endif %}
                             </td>

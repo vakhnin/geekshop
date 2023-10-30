@@ -12,3 +12,11 @@ body {
 .navbar {
     width: 100vw;
 }
+
+.list-group a {
+    background-color: #F7F7F7;
+}
+
+.list-group .active-category {
+    background-color: #E9E9E9;
+}
