@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect
 # Create your views here.
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView
 
 from baskets.models import Basket
-from products.mixin import UserIsLoginMixin, AddTitleAndNavActiveToContextMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin
 from products.models import Product
 
 INCREASE_PRODUCT_ACTION = 'increase-count'
@@ -16,10 +17,13 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-class BasketView(TemplateView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
+class BasketView(TemplateView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     title = 'Geekshop - Корзина'
     nav_active = 'basket'
     template_name = 'baskets/basket.html'
+
+    login_url = "/auth/login-required"
+    redirect_field_name = "redirect_to"
 
 
 @login_required
