@@ -1,18 +1,19 @@
 from django.contrib import auth, messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, UpdateView
+from django.views.generic import FormView, UpdateView, TemplateView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 # Create your views here.
 from authapp.models import ShopUser
 from baskets.models import Basket
 from geekshop import settings
-from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsLoginMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin
 
 
 class UserLoginView(FormView, AddTitleAndNavActiveToContextMixin):
@@ -166,11 +167,15 @@ def verify(request, email, activate_key):
         return HttpResponseRedirect(reverse('authapp:login'))
 
 
-class UserDetailView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
+class UserDetailView(UpdateView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     title = 'Geekshop - Профиль'
     nav_active = 'user'
     model = ShopUser
     form_class = UserProfileForm
+
+    login_url = "/auth/login-required"
+    redirect_field_name = "redirect_to"
+
     success_url = reverse_lazy('authapp:profile')
     template_name = 'authapp/profile.html'
 
@@ -193,6 +198,11 @@ class UserDetailView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsLogin
         context = super(UserDetailView, self).get_context_data()
         context['profile'] = UserProfileEditForm(instance=self.request.user.userprofile)
         return context
+
+
+class UserLoginRequired(TemplateView, AddTitleAndNavActiveToContextMixin):
+    template_name = 'authapp/login-required.html'
+    title = 'Geekshop - Необходима авторизация'
 
 
 class UserLogoutView(LogoutView):
