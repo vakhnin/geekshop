@@ -9,15 +9,11 @@
 <link href="{% static 'css/style.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block menu %}
 <!-- Page Content -->
+{% block content %}
 <div class="container flex-grow-1">
     <div class="row">
         {% include 'products/includes/menu.html' %}
-        {% endblock %}
-
-
-        {% block content %}
         <div class="col-lg-9">
             <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
                 <ol class="carousel-indicators">
