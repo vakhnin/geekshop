@@ -4,7 +4,7 @@
     <span class="navbar-toggler-icon"></span>
 </button>
 <div class="collapse navbar-collapse" id="navbarResponsive">
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ms-auto">
         <li class="nav-item">
             <a class="nav-link{% if nav_active == 'catalog' %} active{% endif %}"
                href="{% url 'products:index' %}">Каталог <i class="fas fa-shopping-bag"></i>
@@ -14,20 +14,20 @@
         {% with authenticated=True %}
         {{ authenticated|json_script:"user-authenticated" }}
         {% endwith %}
-        <li class="nav-item">
-            <div class="dropdown">
+        <li class="nav-item dropdown">
+            <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle{% if nav_active == 'user' %} active{% endif %}"
-                   href="" data-toggle="dropdown">
+                   id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" href=""
+                   data-toggle="dropdown">
                     {{ user.username|default:'Пользователь' }}
-                    <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>
+                    <li class="dropdown-item">
                         <a class="nav-link text-dark" href="{% url 'authapp:profile' %}">
                             Профиль
                         </a>
                     </li>
-                    <li>
+                    <li class="dropdown-item">
                         <a class="nav-link text-dark" href="{% url 'orders:list' %}">
                             Заказы
                         </a>
