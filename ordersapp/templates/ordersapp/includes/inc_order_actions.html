@@ -2,9 +2,9 @@
 <a href="{% url 'orders:delete' object.pk %}"
    class="btn btn-info btn-round btn-danger form-control my-2 last">удалить</a>
 {% endif %}
-<a href="{% url 'orders:list' %}" class="btn btn-info btn-round form-control my-2 last">
+<a href="{% url 'orders:list' %}" class="btn btn-primary btn-round form-control my-2 last">
     к списку заказов
 </a>
-<a href="{% url 'products:index' %}" class="btn btn-info btn-round form-control  my-2 last">
+<a href="{% url 'products:index' %}" class="btn btn-primary btn-round form-control  my-2 last">
     продолжить покупки
 </a>
