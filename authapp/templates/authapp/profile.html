@@ -20,77 +20,74 @@
                  role="alert"
                  style="margin-top: 50px;">
                 {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
             <h1 class="my-4">Профиль</h1>
             <form action="{% url 'authapp:profile' %} " method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-row">
+                <div class="row">
                     <div class="col-lg-6">
                         <div class="row">
                             <div class="col-lg-12 text-center">
                                 <img width="150" height="150"
                                      src="{% if user.image %} {{ user.image.url }} {% else %}
-                         {% static 'vendor/img/users/default_avatar.jpg' %}{% endif %}"
+                                        {% static 'vendor/img/users/default_avatar.jpg' %}{% endif %}"
                                      class="img-thumbnail">
                             </div>
                             <div class="col-lg-12">
-                                <div class="custom-file">
-                                    <label class="custom-file-label" for="{{ form.image.id_for_label }}">Выберите
-                                        изображение</label>
-                                    {{ form.image }}
-                                </div>
+                                <label class="custom-file-label"
+                                       for="{{ form.image.id_for_label }}">Выберите
+                                    изображение для нового аватара</label>
+                                {{ form.image }}
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="form-row">
+                        <div class="row">
                             <div class="col-lg-6">
-                                <label class="small mb-1" for="{{ form.first_name.id_for_label }}">Имя</label>
+                                <label class="mb-1" for="{{ form.first_name.id_for_label }}">Имя</label>
                                 {{ form.first_name }}
                             </div>
                             <div class="col-lg-6">
-                                <label class="small mb-1" for="{{ form.last_name.id_for_label }}">Фамилия</label>
+                                <label class="mb-1" for="{{ form.last_name.id_for_label }}">Фамилия</label>
                                 {{ form.last_name }}
                             </div>
                         </div>
-                        <div class="form-row">
+                        <div class="row">
                             <div class="col-lg-6">
-                                <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя
+                                <label class="mb-1" for="{{ form.username.id_for_label }}">Имя
                                     пользователя</label>
                                 {{ form.username }}
                             </div>
                             <div class="col-lg-6">
-                                <label class="small mb-1" for="{{ form.email.id_for_label }}">Адрес электронной
+                                <label class="mb-1" for="{{ form.email.id_for_label }}">Адрес электронной
                                     почты</label>
                                 {{ form.email }}
                             </div>
                         </div>
-                        <div class="form-row">
+                        <div class="row">
                             <div class="col-lg-6">
-                                <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст
+                                <label class="mb-1" for="{{ form.age.id_for_label }}">Возраст
                                 </label>
                                 {{ form.age }}
                             </div>
                             <div class="col-lg-6">
-                                <label class="small mb-1" for="{{ profile.gender.id_for_label }}">Пол</label>
+                                <label class="mb-1" for="{{ profile.gender.id_for_label }}">Пол</label>
                                 {{ profile.gender }}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="row">
                     <div class="col-lg-12">
-                        <label class="small mb-1" for="{{ profile.about.id_for_label }}">О себе</label>
+                        <label class="mb-1" for="{{ profile.about.id_for_label }}">О себе</label>
                         {{ profile.about}}
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-lg-12" style="margin-top: 33px;">
-                        <input class="btn btn-info btn-block" type="submit" value="Сохранить">
+                <div class="row mt-2">
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary btn-block" type="submit" value="Сохранить">
                     </div>
                 </div>
             </form>
