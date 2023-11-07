@@ -23,7 +23,7 @@ $(document).ready(function () {
         event.preventDefault()
     });
 
-    $('.basket_list').on('click', 'button', () => {
+    $('.basket_list').on('click', () => {
         let t_href = $(event.target)
 
         let action = "no-action"

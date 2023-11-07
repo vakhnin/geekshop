@@ -23,30 +23,27 @@
                     <li class="list-group-item bg-light">
                         <div class="row text-center">
                             <div class="col-lg-3">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <button name="{{ basket.id }}"
-                                                class="btn btn-outline-secondary font-weight-bold decrease-count"
-                                                type="button"> -
-                                        </button>
-                                    </div>
-                                    <input name="{{ basket.id }}" type="text" class="form-control text-right"
+                                <div class="input-group">
+                                    <span class="input-group-text position-relative">
+                                    <a href="#" name="{{ basket.id }}" class="decrease-count stretched-link">
+                                        <i class="fas fa-minus"></i>
+                                    </a>
+                                    </span>
+                                    <input name="{{ basket.id }}" type="text"
+                                           class="form-control product-count text-end"
                                            value="{{ basket.quantity }}" min="0" disabled>
-                                    <div class="input-group-append">
-                                        <button name="{{ basket.id }}"
-                                                class="btn btn-outline-secondary font-weight-bold increase-count"
-                                                type="button"> +
-                                        </button>
-                                    </div>
+                                    <span class="input-group-text position-relative">
+                                    <a href="#" name="{{ basket.id }}" class="increase-count stretched-link">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="col-lg-1">x</div>
-                            <div class="col-lg-3">{{ basket.product.price }} руб</div>
-                            <div class="col-lg-1">=</div>
-                            <div class="col-lg-3">{{ basket.sum }} руб</div>
-                            <div class="col-lg-1">
+                            <div class="col-lg-4 d-flex align-items-center">Цена: {{ basket.product.price }} руб</div>
+                            <div class="col-lg-4 d-flex align-items-center">Сумма: {{ basket.sum }} руб</div>
+                            <div class="col-lg-1 d-flex align-items-center justify-content-end">
                                 <a href="{% url 'baskets:basket_remove' basket.id %}">
-                                    <i class="fas fa-trash"></i>
+                                    <i class="fas fa-trash text-danger"></i>
                                 </a>
                             </div>
                         </div>
