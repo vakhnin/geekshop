@@ -11,7 +11,7 @@
 
 {% block content %}
 <!-- Page Content -->
-<div class="container flex-grow-1">
+<div class="container flex-grow-1 profile">
     <div class="row">
         <div class="col-lg-12">
             {% for message in messages %}
@@ -27,20 +27,18 @@
             <form action="{% url 'authapp:profile' %} " method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <img width="150" height="150"
-                                     src="{% if user.image %} {{ user.image.url }} {% else %}
-                                        {% static 'vendor/img/users/default_avatar.jpg' %}{% endif %}"
-                                     class="img-thumbnail">
-                            </div>
-                            <div class="col-lg-12">
-                                <label class="custom-file-label"
-                                       for="{{ form.image.id_for_label }}">Выберите
-                                    изображение для нового аватара</label>
-                                {{ form.image }}
-                            </div>
+                    <div class="col-lg-6 d-flex flex-column">
+                        <div> Аватар</div>
+                        <div class="flex-grow-1 align-items-center">
+                            <img class="avatar"
+                                 src="{% if user.image %} {{ user.image.url }} {% else %}
+                                        {% static 'vendor/img/users/default_avatar.jpg' %}{% endif %}">
+                        </div>
+                        <div>
+                            <label class="custom-file-label"
+                                   for="{{ form.image.id_for_label }}">Выберите
+                                изображение для нового аватара</label>
+                            {{ form.image }}
                         </div>
                     </div>
                     <div class="col-lg-6">
