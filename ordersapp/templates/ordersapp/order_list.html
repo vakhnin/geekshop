@@ -14,8 +14,8 @@
         <div class="col-12">
             <h1 class="my-4">
                 Ваши заказы,
-                {% if user.first_name %}
-                {{ user.first_name|title }}
+                {% if user.username %}
+                {{ user.username }}
                 {% else %}
                 Пользователь
                 {% endif %}
