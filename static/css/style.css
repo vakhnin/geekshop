@@ -32,15 +32,21 @@ body {
     min-height: 100%;
 }
 
-.profile input[type=text],
-.profile input[type=email],
-.profile input[type=number],
 .profile input[type=file],
-.profile select,
+.profile #id_first_name,
+.profile #id_last_name,
+.profile #id_age,
+.profile #id_gender,
 .profile textarea {
     background-color: #F7F7F7;
 }
 
 .profile textarea {
     height: 7em;
+}
+
+#id_username,
+#id_email {
+  color: #6C757D;
+  background-color: #EDECEF;
 }
