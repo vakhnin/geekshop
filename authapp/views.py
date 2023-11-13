@@ -184,11 +184,19 @@ class UserDetailView(UpdateView, LoginRequiredMixin, AddTitleAndNavActiveToConte
 
     def post(self, request, *args, **kwargs):
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
+        if form['username'].data != form['username'].initial:
+            form.add_error('username', 'Вы не можете изменять поле "Имя пользователя"')
+        if form['email'].data != form['email'].initial:
+            form.add_error('username', 'Вы не можете изменять поле "Адрес электронной почты"')
         profile_form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.user.userprofile)
         if not form.is_valid():
-            messages.error(self.request, form.errors)
+            for error_field in form.errors:
+                for error_message in form.errors[error_field]:
+                    messages.error(self.request, error_message)
         elif not profile_form.is_valid():
-            messages.error(self.request, profile_form.errors)
+            for error_field in profile_form.errors:
+                for error_message in profile_form.errors[error_field]:
+                    messages.error(self.request, error_message)
         else:
             messages.success(self.request, 'Данные профиля успешно обновлены')
             form.save()

@@ -67,7 +67,7 @@ class UserProfileForm(UserChangeForm):
 
     def clean_age(self):
         age = self.cleaned_data['age']
-        if age < 18:
+        if not age or age < 18:
             # self.add_error('age_incorrect', 'Возраст не может быть меньше 18 лет')
             raise ValidationError('Возраст не может быть меньше 18 лет', code='invalid')
         return age
