@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout/', authapp.UserLogoutView.as_view(), name='logout'),
     path('register/', authapp.user_register_view, name='register'),
     path('profile/', authapp.UserDetailView.as_view(), name='profile'),
+    path('change-password/', authapp.change_password, name='change-password'),
 
     path('login-required/', authapp.UserLoginRequired.as_view(), name='login-required'),
 
