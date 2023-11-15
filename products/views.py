@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
 
 from .mixin import AddTitleAndNavActiveToContextMixin
@@ -9,6 +10,10 @@ class IndexTemplateView(TemplateView, AddTitleAndNavActiveToContextMixin):
     title = 'geekshop - Главная'
     nav_active = 'index'
     template_name = 'products/index.html'
+
+
+def page_not_found(request, exception):
+    return render(request, '404.html', status=404)
 
 
 class ProductListView(ListView, AddTitleAndNavActiveToContextMixin):
