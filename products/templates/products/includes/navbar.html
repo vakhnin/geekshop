@@ -42,7 +42,7 @@
         <li class="nav-item">
             <a class="nav-link{% if nav_active == 'basket' %} active{% endif %}" href="{% url 'baskets:main' %}">
                 Корзина <i class="fas fa-shopping-cart"></i>
-                <span class="badge badge-secondary badge-pill
+                <span class="badge text-bg-secondary
                         total-quantity-navigation">{{ baskets.0.total_quantity }}</span>
             </a>
         </li>
