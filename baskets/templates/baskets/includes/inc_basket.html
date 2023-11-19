@@ -19,32 +19,39 @@
                         </div>
                     </div>
                 </div>
-                <ul class="list-group list-group-flush">
+                <ul class="list-group list-group-flush change-count">
                     <li class="list-group-item bg-light">
                         <div class="row text-center">
                             <div class="col-lg-3">
                                 <div class="input-group">
                                     <span class="input-group-text position-relative">
-                                    <a href="#" name="{{ basket.id }}" class="decrease-count stretched-link">
-                                        <i class="fas fa-minus"></i>
-                                    </a>
+                                        <a href="#" data-product-id="{{ basket.id }}"
+                                           class="decrease-count change-count stretched-link">
+                                            <i class="fas fa-minus"></i>
+                                        </a>
                                     </span>
-                                    <input name="{{ basket.id }}" type="text"
+                                    <input type="text"
                                            class="form-control product-count text-end"
                                            value="{{ basket.quantity }}" min="0" disabled>
                                     <span class="input-group-text position-relative">
-                                    <a href="#" name="{{ basket.id }}" class="increase-count stretched-link">
-                                        <i class="fas fa-plus"></i>
-                                    </a>
+                                        <a href="#" data-product-id="{{ basket.id }}"
+                                           class="increase-count change-count stretched-link">
+                                            <i class="fas fa-plus"></i>
+                                        </a>
                                     </span>
                                 </div>
                             </div>
                             <div class="col-lg-4 d-flex align-items-center">Цена: {{ basket.product.price }} руб</div>
-                            <div class="col-lg-4 d-flex align-items-center">Сумма: {{ basket.sum }} руб</div>
+                            <div class="col-lg-4 d-flex align-items-center">
+                                Сумма: <span class="basket-sum">{{ basket.sum }}</span> руб
+                            </div>
                             <div class="col-lg-1 d-flex align-items-center justify-content-end">
-                                <a href="{% url 'baskets:basket_remove' basket.id %}">
-                                    <i class="fas fa-trash text-danger"></i>
-                                </a>
+                                <span class="input-group-text position-relative">
+                                    <a href="#" data-product-id="{{ basket.id }}"
+                                       class="delete-product change-count stretched-link">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </a>
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -68,7 +75,9 @@
                     <h5 class="float-right">{{ baskets.0.total_sum }} руб.</h5>
                 </div>
             </div>
-            <a href="{% url 'orders:create' %}" class="btn btn-success btn-round form-control my-2 last">Оформить</a>
+            <a href="{% url 'orders:create' %}" class="btn btn-success btn-round form-control my-2 last">
+                Оформить заказ
+            </a>
         </div>
     </div>
     {% else %}

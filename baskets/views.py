@@ -11,6 +11,7 @@ from products.models import Product
 
 INCREASE_PRODUCT_ACTION = 'increase-count'
 DECREASE_PRODUCT_ACTION = 'decrease-count'
+DELETE_PRODUCT_ACTION = 'delete-product'
 
 
 def is_ajax(request):
@@ -65,6 +66,8 @@ def basket_edit(request, id_basket, action):
                 basket.save()
             else:
                 no_product = True
+        elif action == DELETE_PRODUCT_ACTION:
+            basket.delete()
 
         baskets = Basket.objects.filter(user=request.user)
         context = {'baskets': baskets}
