@@ -9,6 +9,22 @@ body {
     overflow-x: hidden;
 }
 
+a {
+    color: #88b9b2;
+}
+
+a:hover {
+    color: #6da59d;
+}
+
+.btn-a {
+    background-color: #88b9b2;
+}
+
+.btn-a:hover {
+    background-color: #6da59d;
+}
+
 .navbar {
     width: 100vw;
 }

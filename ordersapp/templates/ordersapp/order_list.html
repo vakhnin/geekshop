@@ -38,8 +38,8 @@
                         {% if item.is_active %}
                         <tr>
                             <td class="td1 orders_list">{{ item.pk }}</td>
-                            <td>{{ item.created|date:"Y-m-d H:i:s" }}</td>
-                            <td>{{ item.updated|date:"Y-m-d H:i:s" }}</td>
+                            <td>{{ item.created|date:"d E Y H:i" }}</td>
+                            <td>{{ item.updated|date:"d E Y H:i" }}</td>
                             <td>{{ item.get_status_display }}</td>
                             <td>
                                 <a href="{% url 'orders:read' item.pk %}">
@@ -60,7 +60,7 @@
                     </table>
                 </div>
             </div>
-            <a href="{% url 'products:index' %}" class="btn btn-primary btn-round form-control  my-2 last">
+            <a href="{% url 'products:index' %}" class="btn btn-a btn-round form-control  my-2 last">
                 продолжить покупки
             </a>
         </div>
