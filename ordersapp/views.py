@@ -27,7 +27,7 @@ class OrderList(ListView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin
     redirect_field_name = 'redirect_to'
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user).order_by('-id')
 
 
 @login_required
