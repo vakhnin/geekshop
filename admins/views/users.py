@@ -19,6 +19,8 @@ class UserCreateView(CreateView, LoginRequiredMixin, AddTitleAndNavActiveToConte
     login_url = '/auth/login-required'
     redirect_field_name = 'redirect_to'
 
+    no_permission_template_name = 'admins/admin-no-permission.html'
+
     def get_template_names(self):
         if self.request.user.is_staff:
             return super().get_template_names()
@@ -29,11 +31,12 @@ class UserCreateView(CreateView, LoginRequiredMixin, AddTitleAndNavActiveToConte
 class UserListView(ListView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = ShopUser
     template_name = 'admins/admin-users-read.html'
-    no_permission_template_name = 'admins/admin-no-permission.html'
     title = 'Админка | Пользователи'
 
     login_url = '/auth/login-required'
     redirect_field_name = 'redirect_to'
+
+    no_permission_template_name = 'admins/admin-no-permission.html'
 
     def get_template_names(self):
         if self.request.user.is_staff:
@@ -52,6 +55,8 @@ class UserUpdateView(UpdateView, LoginRequiredMixin, AddTitleAndNavActiveToConte
     login_url = '/auth/login-required'
     redirect_field_name = 'redirect_to'
 
+    no_permission_template_name = 'admins/admin-no-permission.html'
+
     def get_template_names(self):
         if self.request.user.is_staff:
             return super().get_template_names()
@@ -68,6 +73,8 @@ class UserDeleteView(DeleteView, LoginRequiredMixin, AddTitleAndNavActiveToConte
 
     login_url = '/auth/login-required'
     redirect_field_name = 'redirect_to'
+
+    no_permission_template_name = 'admins/admin-no-permission.html'
 
     def get_template_names(self):
         if self.request.user.is_staff:
