@@ -205,8 +205,8 @@ class UserDetailView(UpdateView, LoginRequiredMixin, AddTitleAndNavActiveToConte
                 for error_message in profile_form.errors[error_field]:
                     messages.error(self.request, error_message)
         else:
-            messages.success(self.request, 'Данные профиля успешно обновлены')
             form.save()
+            messages.success(self.request, 'Данные профиля успешно обновлены')
         return redirect(self.success_url)
 
 
