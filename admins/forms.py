@@ -24,7 +24,8 @@ class UserAdminRegisterForm(UserRegisterForm):
 class UserAdminProfileForm(UserProfileForm):
     class Meta:
         model = ShopUser
-        fields = ('username', 'email', 'image', 'first_name', 'last_name', 'age', 'is_active')
+        fields = ('username', 'email', 'image', 'first_name',
+                  'last_name', 'age', 'is_active', 'is_staff')
 
     def __init__(self, *args, **kwargs):
         super(UserAdminProfileForm, self).__init__(*args, **kwargs)

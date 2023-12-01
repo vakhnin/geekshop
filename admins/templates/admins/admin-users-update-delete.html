@@ -70,9 +70,13 @@
                             <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст</label>
                             {{ form.age }}
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-3">
                             <label class="small mb-1" for="{{ form.is_active.id_for_label }}">Активен</label>
                             {{ form.is_active }}
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="small mb-1" for="{{ form.is_staff.id_for_label }}">Админ</label>
+                            {{ form.is_staff }}
                         </div>
                     </div>
                     <div class="form-row">
