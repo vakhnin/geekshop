@@ -58,8 +58,8 @@ class UserProfileForm(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['readonly'] = 'readonly'
-        self.fields['email'].widget.attrs['readonly'] = 'readonly'
+        self.fields['username'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['readonly'] = True
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'

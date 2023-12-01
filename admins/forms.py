@@ -22,18 +22,12 @@ class UserAdminRegisterForm(UserRegisterForm):
 
 
 class UserAdminProfileForm(UserProfileForm):
-    email = forms.EmailField(widget=forms.EmailInput())
-    username = forms.CharField(widget=forms.TextInput())
-
     class Meta:
         model = ShopUser
         fields = ('username', 'email', 'image', 'first_name', 'last_name', 'age', 'is_active')
 
     def __init__(self, *args, **kwargs):
         super(UserAdminProfileForm, self).__init__(*args, **kwargs)
-
-        self.fields['email'].widget.attrs['readonly'] = False
-        self.fields['username'].widget.attrs['readonly'] = False
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
@@ -85,6 +79,7 @@ class OrderCreateForm(forms.ModelForm):
                 field.widget.attrs['class'] = 'form-control'
             else:
                 field.widget.attrs['class'] = 'form-control py-4'
+
 
 class OrderUpdateForm(forms.ModelForm):
     class Meta:

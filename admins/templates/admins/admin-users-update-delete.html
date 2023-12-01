@@ -6,6 +6,16 @@
     <main>
         <div class="container-fluid">
             <h1 class="mt-4">Редактирование пользователя | {{ shopuser.username }}</h1>
+            {% for message in messages %}
+            <div class="alert {% if message.level != DEFAULT_MESSAGE_LEVELS.ERROR %}alert-success
+                            {% else %}alert-warning{% endif %} alert-dismissible fade show"
+                 role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
             <div class="card-body">
                 <form action="{% url 'admins:admin_users_update' shopuser.id %}" method="post"
                       enctype="multipart/form-data">
