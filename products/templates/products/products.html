@@ -53,7 +53,9 @@
             <div class="card_add_basket">
                 <div class="row">
                     {% for product in products %}
+                    {% if product.is_active %}
                     {% include 'products/includes/card.html' %}
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
