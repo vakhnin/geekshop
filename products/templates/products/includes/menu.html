@@ -6,10 +6,12 @@
             Все категории
         </a>
         {% for category in categories %}
+        {% if category.is_active %}
         <a href="{% url 'products:category' category.pk %}"
            class="list-group-item{% if category.pk == id_category %} active-category{% endif %}">
             {{ category.name }}
         </a>
+        {% endif %}
         {% endfor %}
     </div>
 </div>
