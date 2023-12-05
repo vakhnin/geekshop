@@ -20,7 +20,7 @@ def is_ajax(request):
 
 class OrderList(ListView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
-    title = 'GeekShop | Список заказов'
+    title = 'GeekShop - Список заказов'
     nav_active = 'user'
 
     login_url = '/auth/login-required'
@@ -48,7 +48,7 @@ def order_create(request):
 
 class OrderRead(DetailView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
-    title = 'GeekShop | Просмотр заказа'
+    title = 'GeekShop - Просмотр заказа'
     nav_active = 'user'
 
     login_url = '/auth/login-required'
@@ -58,7 +58,7 @@ class OrderRead(DetailView, LoginRequiredMixin, AddTitleAndNavActiveToContextMix
 class OrderDelete(DeleteView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
     success_url = reverse_lazy('orders:list')
-    title = 'GeekShop | Удаление заказа'
+    title = 'GeekShop - Удаление заказа'
     nav_active = 'user'
 
     login_url = '/auth/login-required'
