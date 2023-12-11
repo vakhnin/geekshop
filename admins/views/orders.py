@@ -1,31 +1,54 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.forms import inlineformset_factory
 from django.views.generic import ListView, UpdateView, DeleteView, CreateView
 
-from admins.forms import OrderUpdateForm, OrderCreateForm
 from admins.forms import OrderItemsForm
+from admins.forms import OrderUpdateForm, OrderCreateForm
 from ordersapp.models import Order, OrderItem
-from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin
 from products.models import ProductCategory
-from django.dispatch import receiver
-from django.db.models.signals import pre_save
-from django.db import connection, transaction
 
 
 # Create your views here.
-class OrderListView(ListView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
+class OrderListView(ListView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
     template_name = 'admins/admin-orders-read.html'
     title = 'Админка | Список заказов'
 
+    login_url = '/auth/login-required'
+    redirect_field_name = 'redirect_to'
 
-class OrderCreateView(CreateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
+    no_permission_template_name = 'admins/admin-no-permission.html'
+
+    def get_template_names(self):
+        if self.request.user.is_staff:
+            return super().get_template_names()
+        else:
+            return self.no_permission_template_name
+
+
+class OrderCreateView(CreateView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
     form_class = OrderCreateForm
     template_name = 'admins/admin-orders-create.html'
     success_url = reverse_lazy('admins:admin_orders')
     title = 'Админка | Создание заказа'
+
+    login_url = '/auth/login-required'
+    redirect_field_name = 'redirect_to'
+
+    no_permission_template_name = 'admins/admin-no-permission.html'
+
+    def get_template_names(self):
+        if self.request.user.is_staff:
+            return super().get_template_names()
+        else:
+            return self.no_permission_template_name
 
     def get_context_data(self, **kwargs):
         context = super(OrderCreateView, self).get_context_data()
@@ -49,12 +72,23 @@ class OrderCreateView(CreateView, AddTitleAndNavActiveToContextMixin, UserIsSupe
         return super().form_valid(form)
 
 
-class OrderUpdateView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
+class OrderUpdateView(UpdateView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
     template_name = 'admins/admin-orders-update-delete.html'
     form_class = OrderUpdateForm
     title = 'Админка | Редактирование заказа'
     success_url = reverse_lazy('admins:admin_orders')
+
+    login_url = '/auth/login-required'
+    redirect_field_name = 'redirect_to'
+
+    no_permission_template_name = 'admins/admin-no-permission.html'
+
+    def get_template_names(self):
+        if self.request.user.is_staff:
+            return super().get_template_names()
+        else:
+            return self.no_permission_template_name
 
     def get_context_data(self, **kwargs):
         context = super(OrderUpdateView, self).get_context_data()
@@ -86,9 +120,20 @@ class OrderUpdateView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsSupe
         return super().form_valid(form)
 
 
-class OrderDeleteView(DeleteView, AddTitleAndNavActiveToContextMixin, UserIsSuperuserMixin):
+class OrderDeleteView(DeleteView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
     success_url = reverse_lazy('admins:admin_orders')
+
+    login_url = '/auth/login-required'
+    redirect_field_name = 'redirect_to'
+
+    no_permission_template_name = 'admins/admin-no-permission.html'
+
+    def get_template_names(self):
+        if self.request.user.is_staff:
+            return super().get_template_names()
+        else:
+            return self.no_permission_template_name
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()

@@ -1,10 +1,10 @@
 <a class="navbar-brand" href="{% url 'main' %}">GeekShop</a>
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
         aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button>
 <div class="collapse navbar-collapse" id="navbarResponsive">
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ms-auto">
         <li class="nav-item">
             <a class="nav-link{% if nav_active == 'catalog' %} active{% endif %}"
                href="{% url 'products:index' %}">Каталог <i class="fas fa-shopping-bag"></i>
@@ -14,20 +14,20 @@
         {% with authenticated=True %}
         {{ authenticated|json_script:"user-authenticated" }}
         {% endwith %}
-        <li class="nav-item">
-            <div class="dropdown">
+        <li class="nav-item dropdown">
+            <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle{% if nav_active == 'user' %} active{% endif %}"
-                   href="" data-toggle="dropdown">
+                   id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" href=""
+                   data-toggle="dropdown">
                     {{ user.username|default:'Пользователь' }}
-                    <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>
+                    <li class="dropdown-item">
                         <a class="nav-link text-dark" href="{% url 'authapp:profile' %}">
                             Профиль
                         </a>
                     </li>
-                    <li>
+                    <li class="dropdown-item">
                         <a class="nav-link text-dark" href="{% url 'orders:list' %}">
                             Заказы
                         </a>
@@ -42,18 +42,18 @@
         <li class="nav-item">
             <a class="nav-link{% if nav_active == 'basket' %} active{% endif %}" href="{% url 'baskets:main' %}">
                 Корзина <i class="fas fa-shopping-cart"></i>
-                <span class="badge badge-secondary badge-pill
+                <span class="badge text-bg-secondary
                         total-quantity-navigation">{{ baskets.0.total_quantity }}</span>
             </a>
         </li>
         {% else %}
         <li class="nav-item">
-            <a class="nav-link" href="" data-target="#login-modal" type="button" data-toggle="modal">
+            <a class="nav-link" href="" data-bs-target="#login-modal" type="button" data-bs-toggle="modal">
                 Войти/Зарегистрироваться
                 <i class="fas fa-sign-in-alt"></i></a>
         </li>
         {% endif %}
-        {% if user.is_superuser %}
+        {% if user.is_staff %}
         <li class="nav-item">
             <a class="nav-link" href="{% url 'admins:index' %}">
                 <i class="fas fa-users-cog"></i>

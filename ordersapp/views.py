@@ -1,21 +1,16 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 from django.db import transaction
-from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
-
 # Create your views here.
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+from django.views.generic import ListView, DetailView, DeleteView
 
-from geekshop import settings
-from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsLoginMixin
 from baskets.models import Basket
-from ordersapp.forms import OrderItemsForm
+from geekshop import settings
 from ordersapp.models import Order, OrderItem
+from products.mixin import AddTitleAndNavActiveToContextMixin
 from products.models import Product
 
 
@@ -23,13 +18,16 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-class OrderList(ListView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
+class OrderList(ListView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
-    title = 'GeekShop | Список заказов'
+    title = 'GeekShop - Список заказов'
     nav_active = 'user'
 
+    login_url = '/auth/login-required'
+    redirect_field_name = 'redirect_to'
+
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user).order_by('-id')
 
 
 @login_required
@@ -48,17 +46,23 @@ def order_create(request):
     return HttpResponseRedirect(reverse('orders:list'))
 
 
-class OrderRead(DetailView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
+class OrderRead(DetailView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
-    title = 'GeekShop | Просмотр заказа'
+    title = 'GeekShop - Просмотр заказа'
     nav_active = 'user'
 
+    login_url = '/auth/login-required'
+    redirect_field_name = 'redirect_to'
 
-class OrderDelete(DeleteView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
+
+class OrderDelete(DeleteView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     model = Order
     success_url = reverse_lazy('orders:list')
-    title = 'GeekShop | Удаление заказа'
+    title = 'GeekShop - Удаление заказа'
     nav_active = 'user'
+
+    login_url = '/auth/login-required'
+    redirect_field_name = 'redirect_to'
 
 
 def order_forming_complete(request, pk):

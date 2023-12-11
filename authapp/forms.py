@@ -62,12 +62,12 @@ class UserProfileForm(UserChangeForm):
         self.fields['email'].widget.attrs['readonly'] = True
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control py-4'
-        self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['image'].widget.attrs['type'] = 'file'
 
     def clean_age(self):
         age = self.cleaned_data['age']
-        if age < 18:
+        if not age or age < 18:
             # self.add_error('age_incorrect', 'Возраст не может быть меньше 18 лет')
             raise ValidationError('Возраст не может быть меньше 18 лет', code='invalid')
         return age
@@ -82,6 +82,6 @@ class UserProfileEditForm(forms.ModelForm):
         super(UserProfileEditForm, self).__init__(*args, **kwargs)
         for filed_name, field in self.fields.items():
             if filed_name != 'gender':
-                field.widget.attrs['class'] = 'form-control py-4'
-            else:
                 field.widget.attrs['class'] = 'form-control'
+            else:
+                field.widget.attrs['class'] = 'form-select'

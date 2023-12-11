@@ -9,6 +9,60 @@ body {
     overflow-x: hidden;
 }
 
+a {
+    color: #88b9b2;
+}
+
+a:hover {
+    color: #6da59d;
+}
+
+.btn-a {
+    background-color: #88b9b2;
+}
+
+.btn-a:hover {
+    background-color: #6da59d;
+}
+
 .navbar {
     width: 100vw;
+}
+
+.list-group a {
+    background-color: #F7F7F7;
+}
+
+.list-group .active-category {
+    background-color: #E9E9E9;
+}
+
+.product-count {
+    max-width: 3em;
+}
+
+.avatar {
+    display: block;
+    width: auto;
+    height: 0;
+    min-height: 100%;
+}
+
+.profile input[type=file],
+.profile #id_first_name,
+.profile #id_last_name,
+.profile #id_age,
+.profile #id_gender,
+.profile textarea {
+    background-color: #F7F7F7;
+}
+
+.profile textarea {
+    height: 7em;
+}
+
+#id_username,
+#id_email {
+  color: #6C757D;
+  background-color: #EDECEF;
 }

@@ -1,0 +1,28 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block css %}
+<!-- Bootstrap core CSS -->
+<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block menu %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Content -->
+<div class="container flex-grow-1">
+    <div>
+        <h1 class="my-4">Необходима авторизация</h1>
+        <p>
+            Для просмотра этой страницы необходимо
+            <a href="" data-bs-target="#login-modal" data-bs-toggle="modal">
+                авторизоваться
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}

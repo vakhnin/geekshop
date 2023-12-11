@@ -26,6 +26,12 @@ $(document).ready(function () {
                 if ( data.error ) {
                     $(".error-div").text(data.error);
                 } else {
+                    const searchString = new URLSearchParams(window.location.search);
+                    const redirect_to = searchString.get('redirect_to');
+                    if ( redirect_to ) {
+                        window.location.replace(redirect_to);
+                    }
+
                     $("#navbar").html(data.content);
                     $("#login-modal").modal('hide');
                 }
@@ -52,6 +58,12 @@ $(document).ready(function () {
                 if ( data.error ) {
                     $(".error-div").text(data.error);
                 } else {
+                    const searchString = new URLSearchParams(window.location.search);
+                    const redirect_to = searchString.get('redirect_to');
+                    if ( redirect_to ) {
+                        window.location.replace(redirect_to);
+                    }
+
                     $("#navbar").html(data.content);
                     $("#registration-modal").modal('hide');
                 }

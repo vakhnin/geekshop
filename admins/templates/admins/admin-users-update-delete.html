@@ -1,14 +1,46 @@
 {% extends 'admins/base.html' %}
+{% load static %}
 
 {% block content %}
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid">
             <h1 class="mt-4">Редактирование пользователя | {{ shopuser.username }}</h1>
+            {% for message in messages %}
+            <div class="alert {% if message.level != DEFAULT_MESSAGE_LEVELS.ERROR %}alert-success
+                            {% else %}alert-warning{% endif %} alert-dismissible fade show"
+                 role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
             <div class="card-body">
                 <form action="{% url 'admins:admin_users_update' shopuser.id %}" method="post"
                       enctype="multipart/form-data">
                     {% csrf_token %}
+                    <div class="form-row mb-2">
+                        <div class="col-lg-12">
+                            <div>
+                                <div>
+                                    <label class="small mb-1" for="{{ form.image.id_for_label }}">Аватар</label>
+                                </div>
+                                {% if form.initial.image %}
+                                <img width="100" height="100"
+                                     src="{{ form.initial.image.url }}" class="img-thumbnail">
+                                {% else %}
+                                <img width="100" height="100" class="img-thumbnail"
+                                     src="{% static '/vendor/img/users/default_avatar.jpg' %}">
+                                {% endif %}
+                            </div>
+                            <div class="custom-file">
+                                {{ form.image }}
+                                <label class="custom-file-label" for="{{ form.image.id_for_label }}">Выберите
+                                    изображение</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="col-lg-6">
                             <div class="form-group">
@@ -20,15 +52,6 @@
                             <div class="form-group">
                                 <label class="small mb-1" for="{{ form.last_name.id_for_label }}">Фамилия</label>
                                 {{ form.last_name }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row mb-2">
-                        <div class="col-lg-12">
-                            <div class="custom-file">
-                                {{ form.image }}
-                                <label class="custom-file-label" for="{{ form.image.id_for_label }}">Выберите
-                                    изображение</label>
                             </div>
                         </div>
                     </div>
@@ -47,9 +70,13 @@
                             <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст</label>
                             {{ form.age }}
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-3">
                             <label class="small mb-1" for="{{ form.is_active.id_for_label }}">Активен</label>
                             {{ form.is_active }}
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="small mb-1" for="{{ form.is_staff.id_for_label }}">Админ</label>
+                            {{ form.is_staff }}
                         </div>
                     </div>
                     <div class="form-row">

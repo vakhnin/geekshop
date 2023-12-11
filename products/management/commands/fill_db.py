@@ -41,4 +41,4 @@ class Command(BaseCommand):
             ShopUser.objects.create_superuser(username='admin',
                                               email='admin@admin.local',
                                               password='admin',
-                                              age=33)
+                                              is_staff=True)

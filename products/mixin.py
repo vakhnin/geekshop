@@ -19,10 +19,3 @@ class AddTitleAndNavActiveToContextMixin(ContextMixin):
         context['title'] = self.title
         context['nav_active'] = self.nav_active
         return context
-
-
-class UserIsLoginMixin(View):
-
-    @method_decorator(user_passes_test(lambda u: u.is_authenticated))
-    def dispatch(self, request, *args, **kwargs):
-        return super(UserIsLoginMixin, self).dispatch(request, *args, **kwargs)

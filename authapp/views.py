@@ -1,18 +1,21 @@
 from django.contrib import auth, messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, UpdateView
+from django.views.generic import FormView, UpdateView, TemplateView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 # Create your views here.
 from authapp.models import ShopUser
 from baskets.models import Basket
 from geekshop import settings
-from products.mixin import AddTitleAndNavActiveToContextMixin, UserIsLoginMixin
+from products.mixin import AddTitleAndNavActiveToContextMixin
 
 
 class UserLoginView(FormView, AddTitleAndNavActiveToContextMixin):
@@ -166,34 +169,71 @@ def verify(request, email, activate_key):
         return HttpResponseRedirect(reverse('authapp:login'))
 
 
-class UserDetailView(UpdateView, AddTitleAndNavActiveToContextMixin, UserIsLoginMixin):
+class UserDetailView(UpdateView, LoginRequiredMixin, AddTitleAndNavActiveToContextMixin):
     title = 'Geekshop - Профиль'
     nav_active = 'user'
     model = ShopUser
     form_class = UserProfileForm
+
+    login_url = "/auth/login-required"
+    redirect_field_name = "redirect_to"
+
     success_url = reverse_lazy('authapp:profile')
     template_name = 'authapp/profile.html'
 
     def get_object(self, queryset=None):
         return self.request.user
 
-    def post(self, request, *args, **kwargs):
-        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
-        profile_form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.user.userprofile)
-        if not form.is_valid():
-            messages.error(self.request, form.errors)
-        elif not profile_form.is_valid():
-            messages.error(self.request, profile_form.errors)
-        else:
-            messages.success(self.request, 'Данные профиля успешно обновлены')
-            form.save()
-        return redirect(self.success_url)
-
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data()
         context['profile'] = UserProfileEditForm(instance=self.request.user.userprofile)
         return context
 
+    def post(self, request, *args, **kwargs):
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
+        if form['username'].data != form['username'].initial:
+            form.add_error('username', 'Вы не можете изменять поле "Имя пользователя"')
+        if form['email'].data != form['email'].initial:
+            form.add_error('username', 'Вы не можете изменять поле "Адрес электронной почты"')
+        profile_form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.user.userprofile)
+        if not form.is_valid():
+            for error_field in form.errors:
+                for error_message in form.errors[error_field]:
+                    messages.error(self.request, error_message)
+        elif not profile_form.is_valid():
+            for error_field in profile_form.errors:
+                for error_message in profile_form.errors[error_field]:
+                    messages.error(self.request, error_message)
+        else:
+            form.save()
+            messages.success(self.request, 'Данные профиля успешно обновлены')
+        return redirect(self.success_url)
+
+
+class UserLoginRequired(TemplateView, AddTitleAndNavActiveToContextMixin):
+    template_name = 'authapp/login-required.html'
+    title = 'Geekshop - Необходима авторизация'
+
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('main')
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        print(request.POST)
+        if not request.POST['new_password1']:
+            messages.error(request, 'Поле "Новый пароль" не может быть пустым')
+        elif not request.POST['new_password2']:
+            messages.error(request, 'Поле "Повторите новый пароль" не может быть пустым')
+        elif request.POST['new_password1'] != request.POST['new_password2']:
+            messages.error(request, 'Поля "Новый пароль" и "Повторите новый пароль" не совпадают')
+        else:
+            user = request.user
+            user.set_password(request.POST['new_password1'])
+            user.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Пароль успешно обновлен')
+
+    return redirect('auth:profile')

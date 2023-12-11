@@ -27,42 +27,38 @@
     </div>
 </nav>
 
-<div id="login-modal" class="modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+<div class="modal fade" id="login-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="card rounded-lg">
-                <div class="card-header">
-                    <h3 class="text-center my-4">
-                        Вход
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </h3>
+                <div class="card-header modal-header">
+                    <h3> Вход </h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="card-body">
                     <div class="text-danger small error-div"></div>
                     <div class="form-group">
-                        <label class="small" for="username">Логин</label>
+                        <label for="username">Логин</label>
                         <input type="text" maxlength="150" class="form-control " id="username">
                     </div>
                     <div class="form-group">
-                        <label class="small" for="password">Пароль</label>
+                        <label for="password">Пароль</label>
                         <input type="password" maxlength="150" class="form-control " id="password">
                     </div>
-                    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                        <a class="" href="#">Забыли пароль?</a>
-                        <input id="login" class="btn btn-primary" type="submit" value="Войти">
+                    <div class="form-group mt-2">
+                        <input id="login" class="btn btn-a btn-block"
+                               type="submit" value="Войти">
                     </div>
                 </div>
                 <div class="card-footer text-center">
-                    <a class="nav-link" href="#" type="button"
-                       data-target="#registration-modal" data-toggle="modal" data-dismiss="modal">
+                    <a type="button" class="text-decoration-underline"
+                       data-bs-target="#registration-modal" data-bs-toggle="modal">
                         Нужен аккаунт? Зарегистрируйся!
                     </a>
                 </div>
                 <div class="card-footer text-center">
                     <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/">
-                        Войти через <i class="fab fa-vk"></i>
+                        Войти через Вконтакте <i class="fab fa-vk"></i>
                     </a>
                 </div>
             </div>
@@ -70,66 +66,62 @@
     </div>
 </div>
 
-<div id="registration-modal" class="modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+<div id="registration-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="card rounded-lg">
-                <div class="card-header">
-                    <h3 class="text-center my-4">
-                        Создать аккаунт
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </h3>
+                <div class="card-header modal-header">
+                    <h3> Создать аккаунт </h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="card-body">
                     <div class="text-danger small error-div"></div>
-                    <div class="form-row">
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="small" for="first_name">Имя</label>
+                                <label for="first_name">Имя</label>
                                 <input type="text" maxlength="150" class="form-control " id="first_name">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="small" for="last_name">Фамилия</label>
+                                <label for="last_name">Фамилия</label>
                                 <input type="text" maxlength="150" class="form-control " id="last_name">
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="row">
                         <div class="col-md-6">
-                            <label class="small" for="username-reg">Логин</label>
+                            <label for="username-reg">Логин</label>
                             <input type="text" maxlength="150" class="form-control " id="username-reg">
                         </div>
                         <div class="col-md-6">
-                            <label class="small" for="email">Адрес электронной почты</label>
+                            <label for="email">Адрес электронной почты</label>
                             <input type="text" maxlength="150" class="form-control " id="email">
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="small" for="password1">Пароль</label>
+                                <label for="password1">Пароль</label>
                                 <input type="password" maxlength="150" class="form-control " id="password1">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="small" for="password2">Подтверждение пароля</label>
+                                <label for="password2">Подтверждение пароля</label>
                                 <input type="password" maxlength="150" class="form-control " id="password2">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <input id="registration" class="btn btn-primary btn-block"
+                    <div class="form-group mt-2">
+                        <input id="registration" class="btn btn-a btn-block"
                                type="submit" value="Создать аккаунт">
                     </div>
                 </div>
                 <div class="card-footer text-center">
-                    <a class="nav-link" href="#" type="button"
-                       data-target="#login-modal" data-toggle="modal" data-dismiss="modal">
+                    <a class="text-decoration-underline" href="#" type="button"
+                       data-bs-target="#login-modal" data-bs-toggle="modal">
                         Уже есть аккаунт? Войти
                     </a>
                 </div>
@@ -159,9 +151,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Необходима авторизация</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>Для добавления товара в корзину необходимо авторизоваться</p>
@@ -175,9 +165,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Невозможно добавить товар в корзину</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>Товар отсутствует на складе</p>
