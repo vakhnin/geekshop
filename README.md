@@ -11,17 +11,19 @@
 ## 1. i. запуск тестового сервера локально
 
 ## 1. ii. развертывание проекта на Ubuntu через docker-compose
-```
-$ sudo apt install docker-compose
-$ git clone https://github.com/vakhnin/geekshop.git
-$ cd geekshop/production
-$ sudo docker compose up --build -d
-```
+
+В терминале:<br>
+$ ```sudo apt update```<br>
+$ ```sudo apt install git docker docker-compose -y```<br>
+$ ```git clone https://github.com/vakhnin/geekshop.git``` <br>
+$ ```cd geekshop/production```<br>
+geekshop/production$ ```sudo docker-compose up --build -d```
+
 При развертывании проекта будет создан пользователь с административными правами 
 с логином `admin` и паролем `admin` 
 Авторизация через "вконтакте" на сервере будет недоступна 
 (необходима дополнительная настройка).
 
-Развертывание тестировалось на Ubuntu 20, Docker 24.0.4, docker-compose 1.25.0 
+Развертывание тестировалось на Ubuntu 20, Docker 24.0.5, docker-compose 1.25.0 
 
 
