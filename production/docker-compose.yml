@@ -1,8 +1,9 @@
-version: '2.2'
+version: '3.7'
 
 services:
   db:
     image: postgres:13.1
+    container_name: postgres_container
     privileged: true
     expose:
       - 5432
@@ -12,6 +13,8 @@ services:
       POSTGRES_DB: geekshop
 
   db_check:
+    image: db_check
+    container_name: db_check_container
     build: ./db_check
     depends_on:
       - db
@@ -19,17 +22,19 @@ services:
 
   adminer:
     image: adminer:4.7.8-standalone
+    container_name: adminer_container
     restart: always
     ports:
       - 8080:8080
     depends_on:
+      - db
       - db_check
 
   django_server:
-    container_name: 'backend_django_now'
+    image: django:1.0.0
+    container_name: django_container
     build:
       context: ..
-    image: backend_django:1.0.0
     expose:
       - 8000
     volumes:
@@ -39,13 +44,17 @@ services:
       - GEEKSHOP_ON_SERVER=True
     command: >
       bash -c "python manage.py migrate
-      && python manage.py fill_db 
       && python manage.py collectstatic --noinput
+      && python manage.py fill_db 
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
     depends_on:
+      - db
       - db_check
+      - adminer
 
   nginx:
+    image: nginx
+    container_name: nginx_container
     build: ./nginx
     ports:
       - 80:80
@@ -53,6 +62,9 @@ services:
       - media_volume:/media
       - static_volume:/static
     depends_on:
+      - db
+      - db_check
+      - adminer
       - django_server
 
 volumes:
