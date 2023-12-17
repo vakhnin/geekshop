@@ -1,4 +1,4 @@
-version: '2.2'
+version: '3.7'
 
 services:
   db:
@@ -23,6 +23,7 @@ services:
     ports:
       - 8080:8080
     depends_on:
+      - db
       - db_check
 
   django_server:
@@ -43,7 +44,9 @@ services:
       && python manage.py collectstatic --noinput
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
     depends_on:
+      - db
       - db_check
+      - adminer
 
   nginx:
     build: ./nginx
@@ -53,6 +56,9 @@ services:
       - media_volume:/media
       - static_volume:/static
     depends_on:
+      - db
+      - db_check
+      - adminer
       - django_server
 
 volumes:
