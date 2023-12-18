@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2.3'
 
 services:
   db:
@@ -11,14 +11,11 @@ services:
       POSTGRES_USER: geekbrains
       POSTGRES_PASSWORD: geekbrains
       POSTGRES_DB: geekshop
-
-  db_check:
-    image: db_check
-    container_name: db_check_container
-    build: ./db_check
-    depends_on:
-      - db
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "geekshop" ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
 
   adminer:
     image: adminer:4.7.8-standalone
@@ -27,8 +24,8 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - db
-      - db_check
+      db:
+        condition: service_healthy
 
   django_server:
     image: django:1.0.0
@@ -44,13 +41,12 @@ services:
       - GEEKSHOP_ON_SERVER=True
     command: >
       bash -c "python manage.py migrate
-      && python manage.py collectstatic --noinput
       && python manage.py fill_db 
+      && python manage.py collectstatic --noinput
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
     depends_on:
-      - db
-      - db_check
-      - adminer
+      db:
+        condition: service_healthy
 
   nginx:
     image: nginx
@@ -62,9 +58,6 @@ services:
       - media_volume:/media
       - static_volume:/static
     depends_on:
-      - db
-      - db_check
-      - adminer
       - django_server
 
 volumes:
