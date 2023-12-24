@@ -2,7 +2,7 @@ version: '2.3'
 
 services:
   db:
-    image: postgres:13.1
+    image: postgres:14.7-alpine
     container_name: postgres_container
     privileged: true
     expose:
@@ -15,7 +15,7 @@ services:
       logging: "promtail"
       logging_jobname: "containerlogs"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "geekshop" ]
+      test: ["CMD-SHELL", "pg_isready -d geekshop -U geekbrains"]
       interval: 1s
       timeout: 5s
       retries: 10
