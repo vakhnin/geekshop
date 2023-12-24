@@ -11,9 +11,6 @@ services:
       POSTGRES_USER: geekbrains
       POSTGRES_PASSWORD: geekbrains
       POSTGRES_DB: geekshop
-    labels:
-      logging: "promtail"
-      logging_jobname: "containerlogs"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "-d", "geekshop" ]
       interval: 1s
@@ -47,9 +44,6 @@ services:
       && python manage.py fill_db 
       && python manage.py collectstatic --noinput
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
-    labels:
-      logging: "promtail"
-      logging_jobname: "containerlogs"
     depends_on:
       db:
         condition: service_healthy
@@ -63,33 +57,8 @@ services:
     volumes:
       - media_volume:/media
       - static_volume:/static
-    labels:
-      logging: "promtail"
-      logging_jobname: "containerlogs"
     depends_on:
       - django_server
-
-  loki:
-    image: grafana/loki:2.9.2
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
-
-  promtail:
-    image: grafana/promtail:2.9.2
-    volumes:
-      - ./promtail/config.yml:/etc/promtail/config.yml
-      - /var/log:/var/log
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: -config.file=/etc/promtail/config.yml
-
-  grafana:
-    image: grafana/grafana:10.1.6
-    ports:
-      - 3000:3000
-    volumes:
-      - ./grafana/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
 
 volumes:
   media_volume:
