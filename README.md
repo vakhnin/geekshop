@@ -56,7 +56,7 @@ geekshop/production$ ```sudo docker-compose up --build -d```
 (необходима дополнительная настройка).
 
 Если дополнительно необходимо развернуть Grafana с Loki для 
-отслеживания логов: 
+отслеживания логов:<br>
 geekshop/production$ ```sudo docker-compose -f ./docker-compose-grafana.yml up --build -d```
 
 Развертывание тестировалось на Ubuntu 20, Docker 24.0.5, docker-compose 1.25.0 
