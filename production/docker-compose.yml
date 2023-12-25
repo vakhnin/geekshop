@@ -2,7 +2,7 @@ version: '2.3'
 
 services:
   db:
-    image: postgres:13.1
+    image: postgres:14.7-alpine
     container_name: postgres_container
     privileged: true
     expose:
@@ -11,8 +11,11 @@ services:
       POSTGRES_USER: geekbrains
       POSTGRES_PASSWORD: geekbrains
       POSTGRES_DB: geekshop
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "geekshop" ]
+      test: ["CMD-SHELL", "pg_isready -d geekshop -U geekbrains"]
       interval: 1s
       timeout: 5s
       retries: 10
@@ -44,6 +47,9 @@ services:
       && python manage.py fill_db 
       && python manage.py collectstatic --noinput
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     depends_on:
       db:
         condition: service_healthy
@@ -57,6 +63,9 @@ services:
     volumes:
       - media_volume:/media
       - static_volume:/static
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
     depends_on:
       - django_server
 
