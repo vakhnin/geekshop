@@ -16,7 +16,7 @@ scrape_configs:
     labels:
       job: varlogs
       __path__: /var/log/*log
-- job_name: f_scrape
+- job_name: containers_scrape
   docker_sd_configs:
    - host: unix:///var/run/docker.sock
      refresh_interval: 5s

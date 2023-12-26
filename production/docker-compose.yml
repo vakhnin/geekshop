@@ -13,7 +13,7 @@ services:
       POSTGRES_DB: geekshop
     labels:
       logging: "promtail"
-      logging_jobname: "containerlogs"
+      logging_jobname: "postgreslogs"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d geekshop -U geekbrains"]
       interval: 1s
@@ -49,7 +49,7 @@ services:
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
     labels:
       logging: "promtail"
-      logging_jobname: "containerlogs"
+      logging_jobname: "djangologs"
     depends_on:
       db:
         condition: service_healthy
@@ -65,7 +65,7 @@ services:
       - static_volume:/static
     labels:
       logging: "promtail"
-      logging_jobname: "containerlogs"
+      logging_jobname: "nginxlogs"
     depends_on:
       - django_server
 
