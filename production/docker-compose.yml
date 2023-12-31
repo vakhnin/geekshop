@@ -12,8 +12,7 @@ services:
       POSTGRES_PASSWORD: geekbrains
       POSTGRES_DB: geekshop
     labels:
-      logging: "promtail"
-      logging_jobname: "postgreslogs"
+      logging: "commonlogs"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d geekshop -U geekbrains"]
       interval: 1s
@@ -26,6 +25,8 @@ services:
     restart: always
     ports:
       - 8080:8080
+    labels:
+      logging: "commonlogs"
     depends_on:
       db:
         condition: service_healthy
@@ -48,8 +49,7 @@ services:
       && python manage.py collectstatic --noinput
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
     labels:
-      logging: "promtail"
-      logging_jobname: "djangologs"
+      logging: "commonlogs"
     depends_on:
       db:
         condition: service_healthy
@@ -64,8 +64,7 @@ services:
       - media_volume:/media
       - static_volume:/static
     labels:
-      logging: "promtail"
-      logging_jobname: "nginxlogs"
+      logging: "nginxlogs"
     depends_on:
       - django_server
 
