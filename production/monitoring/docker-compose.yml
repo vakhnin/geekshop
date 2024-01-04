@@ -6,6 +6,8 @@ services:
     expose:
       - 3100
     command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - production_network 
 
   promtail:
     image: grafana/promtail:2.9.2
@@ -15,6 +17,25 @@ services:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
     command: -config.file=/etc/promtail/config.yml
+    networks:
+      - production_network 
+
+  nginx-prometheus-exporter:
+    image: nginx/nginx-prometheus-exporter:1.0
+    expose:
+      - 9113
+    command: -nginx.scrape-uri=http://nginx/nginx_status
+    networks:
+      - production_network
+    
+  prometheus:
+    image: prom/prometheus:v2.45.2
+    expose:
+      - 9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - production_network
 
   grafana:
     image: grafana/grafana:10.1.6
@@ -22,3 +43,12 @@ services:
       - 3000:3000
     volumes:
       - ./grafana/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./grafana/dashboard.json:/etc/grafana/provisioning/dashboards/main.json
+    networks:
+      - production_network
+  
+networks:  
+  production_network:
+    driver: bridge
+    name: production_network
+    external: true
