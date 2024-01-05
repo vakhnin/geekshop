@@ -42,8 +42,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./grafana/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
-      - ./grafana/dashboard.json:/etc/grafana/provisioning/dashboards/main.json
+      - ./grafana:/etc/grafana/provisioning/
     networks:
       - production_network
   

@@ -24,6 +24,94 @@
   "panels": [
     {
       "datasource": {
+        "type": "prometheus",
+        "uid": "P1809F7CD0C75ACF3"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "index": 1,
+                  "text": "Down"
+                },
+                "1": {
+                  "index": 0,
+                  "text": "Up"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.1.6",
+      "repeat": "instance",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
+          "editorMode": "code",
+          "expr": "nginx_up{instance=~\"$instance\"}",
+          "interval": "15s",
+          "legendFormat": "",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "now-5m",
+      "title": "Nginx",
+      "type": "stat"
+    },
+    {
+      "datasource": {
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
@@ -73,7 +161,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 5
       },
       "id": 3,
       "options": {
@@ -109,7 +197,7 @@
           "refId": "A"
         }
       ],
-      "title": "Nginx logs by status panel",
+      "title": "Nginx logs by status",
       "type": "barchart"
     },
     {
@@ -163,7 +251,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 5
       },
       "id": 4,
       "options": {
@@ -209,7 +297,7 @@
           "refId": "B"
         }
       ],
-      "title": "Nginx logs by method panel",
+      "title": "Nginx logs by method",
       "type": "barchart"
     },
     {
@@ -221,7 +309,7 @@
         "h": 10,
         "w": 15,
         "x": 0,
-        "y": 8
+        "y": 13
       },
       "id": 2,
       "options": {
@@ -246,7 +334,7 @@
           "refId": "A"
         }
       ],
-      "title": "System nginx log Panel",
+      "title": "System nginx log",
       "type": "logs"
     }
   ],
@@ -255,7 +343,38 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "nginx-prometheus-exporter:9113"
+          ],
+          "value": [
+            "nginx-prometheus-exporter:9113"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "definition": "label_values(nginx_up,instance)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(nginx_up,instance)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-7d",
@@ -263,8 +382,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Main dashboard",
+  "title": "Geekshop dashboard",
   "uid": "e9ed28a3-ea19-447a-b3e6-59db79aa7bdb",
-  "version": 17,
+  "version": 16,
   "weekStart": ""
 }
