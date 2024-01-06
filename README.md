@@ -5,7 +5,7 @@
 Содержание:
 1. Запуск тестового сервера разработки Django локально
    1. Запуск тестового сервера разработки Django локально (Windows 10)
-   2. Запуск тестового сервера разработки Django локально (Ubuntu 20)
+   2. Запуск тестового сервера разработки Django локально (Ubuntu 20.04)
 2. Развертывание проекта на сервере
 
 ## 1. i. Запуск тестового сервера разработки Django локально (Windows 10)
@@ -27,7 +27,7 @@ geekshop&gt; ```.\venv\Scripts\activate.bat``` <br>
 
 Тестировалось с Python 3.12
 
-## 1. ii. Запуск тестового сервера разработки Django локально (Ubuntu 20)
+## 1. ii. Запуск тестового сервера разработки Django локально (Ubuntu 20.04)
 
 $ ```sudo apt update``` <br>
 $ ```sudo apt install git python3-venv -y``` <br>
@@ -56,7 +56,7 @@ geekshop/production$ ```sudo docker-compose up --build -d```
 (необходима дополнительная настройка).
 
 Если дополнительно необходимо развернуть Grafana с Loki для 
-отслеживания логов:<br>
+отслеживания логов, Prometheus для отсеживания метрик и Dasboard:<br>
 geekshop/production$ ```sudo docker-compose -f ./docker-compose-grafana.yml up --build -d```
 
-Развертывание тестировалось на Ubuntu 20, Docker 24.0.5, docker-compose 1.25.0 
+Развертывание тестировалось на Ubuntu 20.04, Docker 24.0.5, docker-compose 1.25.0 

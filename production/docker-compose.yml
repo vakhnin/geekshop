@@ -12,23 +12,14 @@ services:
       POSTGRES_PASSWORD: geekbrains
       POSTGRES_DB: geekshop
     labels:
-      logging: "promtail"
-      logging_jobname: "containerlogs"
+      logging: "commonlogs"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d geekshop -U geekbrains"]
       interval: 1s
       timeout: 5s
       retries: 10
-
-  adminer:
-    image: adminer:4.7.8-standalone
-    container_name: adminer_container
-    restart: always
-    ports:
-      - 8080:8080
-    depends_on:
-      db:
-        condition: service_healthy
+    networks:
+      - production_network
 
   django_server:
     image: django:1.0.0
@@ -48,11 +39,12 @@ services:
       && python manage.py collectstatic --noinput
       && gunicorn geekshop.wsgi -b 0.0.0.0:8000"
     labels:
-      logging: "promtail"
-      logging_jobname: "containerlogs"
+      logging: "commonlogs"
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - production_network
 
   nginx:
     image: nginx
@@ -64,11 +56,17 @@ services:
       - media_volume:/media
       - static_volume:/static
     labels:
-      logging: "promtail"
-      logging_jobname: "containerlogs"
+      logging: "nginxlogs"
     depends_on:
       - django_server
+    networks:
+      - production_network
 
 volumes:
   media_volume:
   static_volume:
+  
+networks:
+  production_network:
+    driver: bridge
+    name: production_network
