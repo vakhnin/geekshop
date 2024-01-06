@@ -57,6 +57,7 @@ services:
     ports:
       - 3000:3000
     volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana:/etc/grafana/provisioning/
     networks:
       - production_network
