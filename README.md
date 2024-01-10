@@ -25,6 +25,9 @@ geekshop&gt; ```.\venv\Scripts\activate.bat``` <br>
 (venv) geekshop&gt; ```python manage.py fill_db``` <br>
 (venv) geekshop&gt; ```python manage.py runserver``` <br>
 
+При развертывании проекта будет создан пользователь с административными правами 
+с логином `admin` и паролем `admin` 
+
 Тестировалось с Python 3.12
 
 ## 1. ii. Запуск тестового сервера разработки Django локально (Ubuntu 20.04)
@@ -40,6 +43,9 @@ geekshop$ ```source venv/bin/activate``` <br>
 (venv) geekshop$ ```python3 manage.py migrate``` <br>
 (venv) geekshop$ ```python3 manage.py fill_db``` <br>
 (venv) geekshop$ ```python3 manage.py runserver``` <br>
+
+При развертывании проекта будет создан пользователь с административными правами 
+с логином `admin` и паролем `admin` 
 
 ## 2. развертывание проекта на Ubuntu через docker-compose
 
@@ -57,6 +63,8 @@ geekshop/production$ ```sudo docker-compose up --build -d```
 
 Если дополнительно необходимо развернуть Grafana с Loki для 
 отслеживания логов, Prometheus для отсеживания метрик и Dasboard:<br>
-geekshop/production$ ```sudo docker-compose -f ./docker-compose-grafana.yml up --build -d```
+
+geekshop/production$ ```cd monitoring```<br>
+geekshop/production/monitoring$ ```sudo docker-compose up --build -d```
 
 Развертывание тестировалось на Ubuntu 20.04, Docker 24.0.5, docker-compose 1.25.0 
