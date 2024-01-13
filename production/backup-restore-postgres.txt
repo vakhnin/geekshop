@@ -1,0 +1,5 @@
+# Make BD dump
+sudo docker exec -i postgres_container pg_dump --clean -U geekbrains geekshop > geekshop_dump.sql
+
+# Restory BD from dump
+sudo docker exec -i postgres_container psql -U geekbrains geekshop < geekshop_dump.sql
